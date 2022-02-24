@@ -66,7 +66,7 @@ public class PlayerService {
     public void deletePlayer(Long playerID) {
         boolean exists = playerRepository.existsById(playerID);
         if (!exists) {
-            throw new IllegalStateException("student with id " + playerID + " does not exist");
+            throw new IllegalStateException("player with id " + playerID + " does not exist");
         }
         playerRepository.deleteById(playerID);
     }
