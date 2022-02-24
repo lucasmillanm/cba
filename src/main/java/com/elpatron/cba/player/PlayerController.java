@@ -11,12 +11,12 @@ public class PlayerController {
     private final PlayerService playerService;
 
     @Autowired
-    public PlayerController(PlayerService playerService){
+    public PlayerController(PlayerService playerService) {
         this.playerService = playerService;
     }
 
     @GetMapping
-    public List<Player> getAllPlayers(){
+    public List<Player> getAllPlayers() {
         return playerService.getAllPlayers();
     }
 
@@ -33,5 +33,10 @@ public class PlayerController {
             @RequestParam(required = false) Integer number,
             @RequestParam(required = false) String pos) {
         playerService.updatePlayer(playerID, firstName, lastName, number, pos);
+    }
+
+    @DeleteMapping(path = "{playerID}")
+    public void deletePlayer(@PathVariable("playerID") Long playerID){
+        playerService.deletePlayer(playerID);
     }
 }

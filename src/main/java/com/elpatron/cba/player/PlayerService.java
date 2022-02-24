@@ -2,9 +2,6 @@ package com.elpatron.cba.player;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.transaction.Transactional;
 import java.util.List;
@@ -32,7 +29,7 @@ public class PlayerService {
         playerRepository.save(player);
     }
 
-    private boolean notEmpty(String name){
+    private boolean notEmpty(String name) {
         return name != null && name.length() > 0;
     }
 
@@ -64,5 +61,13 @@ public class PlayerService {
                 !Objects.equals(player.getPos(), pos)) {
             player.setPos(pos);
         }
+    }
+
+    public void deletePlayer(Long playerID) {
+        boolean exists = playerRepository.existsById(playerID);
+        if (!exists) {
+            throw new IllegalStateException("student with id " + playerID + " does not exist");
+        }
+        playerRepository.deleteById(playerID);
     }
 }
