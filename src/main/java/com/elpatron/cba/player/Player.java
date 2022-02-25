@@ -15,7 +15,7 @@ public class Player {
             strategy = GenerationType.SEQUENCE,
             generator = "player_sequence"
     )
-    private Long id;
+    public Long id;
 
     @Column(name = "first_name")
     private String firstName;

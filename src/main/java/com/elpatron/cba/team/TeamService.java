@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+import static com.elpatron.cba.utilities.Functions.notEmpty;
+
 @Service
 public class TeamService {
     private final TeamRepository teamRepository;
@@ -30,9 +32,7 @@ public class TeamService {
         teamRepository.save(team);
     }
 
-    private boolean notEmpty(String name) {
-        return name != null && name.length() > 0;
-    }
+
 
     @Transactional
     public void updateTeam(Long teamID, String teamName) {

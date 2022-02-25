@@ -1,6 +1,5 @@
 package com.elpatron.cba.team;
 
-
 import javax.persistence.*;
 
 @Entity

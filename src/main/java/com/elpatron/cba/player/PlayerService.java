@@ -1,5 +1,6 @@
 package com.elpatron.cba.player;
 
+import com.elpatron.cba.team.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -8,13 +9,17 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+import static com.elpatron.cba.utilities.Functions.notEmpty;
+
 @Service
 public class PlayerService {
     private final PlayerRepository playerRepository;
+    private final TeamRepository teamRepository;
 
     @Autowired
-    public PlayerService(PlayerRepository playerRepository) {
+    public PlayerService(PlayerRepository playerRepository, TeamRepository teamRepository) {
         this.playerRepository = playerRepository;
+        this.teamRepository = teamRepository;
     }
 
     public List<Player> getAllPlayers() {
@@ -27,10 +32,6 @@ public class PlayerService {
             throw new IllegalStateException("number taken");
         }
         playerRepository.save(player);
-    }
-
-    private boolean notEmpty(String name) {
-        return name != null && name.length() > 0;
     }
 
     @Transactional
