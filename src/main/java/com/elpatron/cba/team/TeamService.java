@@ -27,15 +27,13 @@ public class TeamService {
     public void addNewTeam(Team team) {
         Optional<Team> teamOptional = teamRepository.findTeamByName(team.getTeamName());
         if (teamOptional.isPresent()) {
-            throw new IllegalStateException("team exists");
+            throw new IllegalStateException("team already exists");
         }
         teamRepository.save(team);
     }
 
-
-
     @Transactional
-    public void updateTeam(Long teamID, String teamName) {
+    public void updateTeam(Long teamID, String teamName, String teamCity, String teamCoach) {
         Team team = teamRepository.findById(teamID)
                 .orElseThrow(() -> new IllegalStateException(
                         "player with id " + teamID + " does not exist"
@@ -43,6 +41,14 @@ public class TeamService {
         if (notEmpty(teamName) &&
                 !Objects.equals(team.getTeamName(), teamName)) {
             team.setTeamName(teamName);
+        }
+        if (notEmpty(teamCity) &&
+                !Objects.equals(team.getTeamCity(), teamCity)) {
+            team.setTeamCity(teamCity);
+        }
+        if (notEmpty(teamCoach) &&
+                !Objects.equals(team.getTeamCoach(), teamCoach)) {
+            team.setTeamCoach(teamCoach);
         }
 
     }

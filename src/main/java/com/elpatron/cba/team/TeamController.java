@@ -30,8 +30,10 @@ public class TeamController {
     @PutMapping(path = "{teamID}")
     public void updateTeam(
             @PathVariable("teamID") Long teamID,
-            @RequestParam(required = false) String teamName) {
-        teamService.updateTeam(teamID, teamName);
+            @RequestParam(required = false) String teamName,
+            @RequestParam(required = false) String teamCity,
+            @RequestParam(required = false) String teamCoach) {
+        teamService.updateTeam(teamID, teamName, teamCity, teamCoach);
     }
 
     @DeleteMapping(path = "{teamID}")

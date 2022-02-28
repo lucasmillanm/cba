@@ -20,11 +20,19 @@ public class Team {
     @Column(name = "teamName")
     private String teamName;
 
+    @Column(name = "teamCity")
+    private String teamCity;
+
+    @Column(name = "teamCoach")
+    private String teamCoach;
+
     public Team() {
     }
 
-    public Team(String teamName) {
+    public Team(String teamName, String teamCity, String teamCoach) {
         this.teamName = teamName;
+        this.teamCity = teamCity;
+        this.teamCoach = teamCoach;
     }
 
     public Long getTeamID() {
@@ -41,5 +49,21 @@ public class Team {
 
     public void setTeamName(String teamName) {
         this.teamName = teamName;
+    }
+
+    public String getTeamCity() {
+        return teamCity;
+    }
+
+    public void setTeamCity(String teamCity) {
+        this.teamCity = teamCity;
+    }
+
+    public String getTeamCoach() {
+        return teamCoach;
+    }
+
+    public void setTeamCoach(String teamCoach) {
+        this.teamCoach = teamCoach;
     }
 }
