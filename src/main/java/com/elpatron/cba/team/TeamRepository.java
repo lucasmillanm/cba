@@ -1,6 +1,5 @@
 package com.elpatron.cba.team;
 
-import com.elpatron.cba.player.Player;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;

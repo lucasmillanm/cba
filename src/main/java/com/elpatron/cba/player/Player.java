@@ -3,7 +3,7 @@ package com.elpatron.cba.player;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "players")
+@Table(name = "player")
 public class Player {
     @Id
     @SequenceGenerator(
@@ -15,7 +15,7 @@ public class Player {
             strategy = GenerationType.SEQUENCE,
             generator = "player_sequence"
     )
-    public Long id;
+    public Long playerID;
 
     @Column(name = "first_name")
     private String firstName;
@@ -41,12 +41,12 @@ public class Player {
         this.pos = pos;
     }
 
-    public Long getId() {
-        return id;
+    public Long getPlayerID() {
+        return playerID;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setPlayerID(Long playerID) {
+        this.playerID = playerID;
     }
 
     public String getFirstName() {

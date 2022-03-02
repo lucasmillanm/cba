@@ -1,9 +1,20 @@
 package com.elpatron.cba.team;
 
-import javax.persistence.*;
+import com.elpatron.cba.player.Player;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
+
+@Getter
+@Setter
+@NoArgsConstructor
 @Entity
-@Table(name = "teams")
+@Table(name = "team")
 public class Team {
     @Id
     @SequenceGenerator(
@@ -17,17 +28,17 @@ public class Team {
     )
     private Long teamID;
 
-    @Column(name = "teamName")
+    @Column(name = "team_name")
     private String teamName;
 
-    @Column(name = "teamCity")
+    @Column(name = "team_city")
     private String teamCity;
 
-    @Column(name = "teamCoach")
+    @Column(name = "team_coach")
     private String teamCoach;
 
-    public Team() {
-    }
+    @OneToMany
+    private List<Player> playerFK = new ArrayList<>();
 
     public Team(String teamName, String teamCity, String teamCoach) {
         this.teamName = teamName;
@@ -35,35 +46,4 @@ public class Team {
         this.teamCoach = teamCoach;
     }
 
-    public Long getTeamID() {
-        return teamID;
-    }
-
-    public void setTeamID(Long teamID) {
-        this.teamID = teamID;
-    }
-
-    public String getTeamName() {
-        return teamName;
-    }
-
-    public void setTeamName(String teamName) {
-        this.teamName = teamName;
-    }
-
-    public String getTeamCity() {
-        return teamCity;
-    }
-
-    public void setTeamCity(String teamCity) {
-        this.teamCity = teamCity;
-    }
-
-    public String getTeamCoach() {
-        return teamCoach;
-    }
-
-    public void setTeamCoach(String teamCoach) {
-        this.teamCoach = teamCoach;
-    }
 }

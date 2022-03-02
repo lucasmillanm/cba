@@ -1,6 +1,6 @@
 package com.elpatron.cba.team;
 
-import com.elpatron.cba.team.TeamRepository;
+import com.elpatron.cba.player.PlayerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,10 +14,12 @@ import static com.elpatron.cba.utilities.Functions.notEmpty;
 @Service
 public class TeamService {
     private final TeamRepository teamRepository;
+    private final PlayerRepository playerRepository;
 
     @Autowired
-    public TeamService(TeamRepository teamRepository) {
+    public TeamService(TeamRepository teamRepository, PlayerRepository playerRepository) {
         this.teamRepository = teamRepository;
+        this.playerRepository = playerRepository;
     }
 
     public List<Team> getAllTeams() {
