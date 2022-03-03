@@ -38,7 +38,7 @@ public class Team {
     private String teamCoach;
 
     @OneToMany
-    private List<Player> playerFK = new ArrayList<>();
+    private List<Player> teamPlayers = new ArrayList<>();
 
     public Team(String teamName, String teamCity, String teamCoach) {
         this.teamName = teamName;
