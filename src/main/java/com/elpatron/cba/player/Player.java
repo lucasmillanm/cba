@@ -1,5 +1,6 @@
 package com.elpatron.cba.player;
 
+import com.elpatron.cba.team.Team;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
