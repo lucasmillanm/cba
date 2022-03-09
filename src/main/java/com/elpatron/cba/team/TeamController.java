@@ -3,6 +3,7 @@ package com.elpatron.cba.team;
 import com.elpatron.cba.player.Player;
 import com.elpatron.cba.player.PlayerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,15 +12,17 @@ import java.util.List;
 @RequestMapping("/cba/teams")
 public class TeamController {
     private TeamService teamService;
+    private PlayerService playerService;
 
     @Autowired
-    public TeamController(TeamService teamService) {
+    public TeamController(TeamService teamService, PlayerService playerService) {
         this.teamService = teamService;
+        this.playerService = playerService;
     }
 
     @GetMapping
-    public List<Team> getAllTeams() {
-        return teamService.getAllTeams();
+    public ResponseEntity<List<Team>> getAllTeams() {
+        return ResponseEntity.ok(teamService.getAllTeams());
     }
 
     @PostMapping
@@ -40,4 +43,20 @@ public class TeamController {
     public void deleteTeam(@PathVariable("teamID") Long teamID) {
         teamService.deleteTeam(teamID);
     }
+
+    @PostMapping(path = "{teamID}/add/{playerID}")
+    public void addTeamPlayer(
+            @PathVariable("teamID") Long teamID,
+            @PathVariable("playerID") Long playerID) {
+        teamService.addTeamPlayer(teamID, playerID);
+    }
+
+   /* @DeleteMapping(path = "{teamID}/remove/{playerID}")
+    public void removeTeamPlayer(
+            @PathVariable("teamID") Long teamID,
+            @PathVariable("playerID") Long playerID
+            @RequestParam List<Player> teamPlayers) {
+        teamService.removeTeamPlayer(teamID, playerID);
+    }*/
+
 }

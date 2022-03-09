@@ -1,5 +1,6 @@
 package com.elpatron.cba.team;
 
+import com.elpatron.cba.player.Player;
 import com.elpatron.cba.player.PlayerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -52,7 +53,6 @@ public class TeamService {
                 !Objects.equals(team.getTeamCoach(), teamCoach)) {
             team.setTeamCoach(teamCoach);
         }
-
     }
 
     public void deleteTeam(Long teamID) {
@@ -62,4 +62,22 @@ public class TeamService {
         }
         teamRepository.deleteById(teamID);
     }
+
+    public void addTeamPlayer(Long teamID, Long playerID) {
+        Optional<Team> teamOptional = teamRepository.findById(teamID);
+        Optional<Player> playerOptional = playerRepository.findById(playerID);
+        if (teamOptional.isPresent() && playerOptional.isPresent()) {
+            Team existingTeam = teamOptional.get();
+            existingTeam.addTeamPlayer(playerOptional.get());
+            teamRepository.save(existingTeam);
+        } else {
+            throw new IllegalStateException("team or player does not exist");
+        }
+
+    }
+
+   /* public void removeTeamPlayer(Long teamID, Long playerID) {
+        teamRepository.deleteById(playerID);
+    }*/
+
 }

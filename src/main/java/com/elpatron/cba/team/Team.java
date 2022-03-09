@@ -1,7 +1,6 @@
 package com.elpatron.cba.team;
 
 import com.elpatron.cba.player.Player;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -40,10 +39,19 @@ public class Team {
     @OneToMany
     private List<Player> teamPlayers = new ArrayList<>();
 
-    public Team(String teamName, String teamCity, String teamCoach) {
+    public Team(String teamName, String teamCity, String teamCoach, List<Player> teamPlayers) {
         this.teamName = teamName;
         this.teamCity = teamCity;
         this.teamCoach = teamCoach;
+        this.teamPlayers = teamPlayers;
+    }
+
+    public void addTeamPlayer(Player player) {
+        teamPlayers.add(player);
+    }
+
+    public void removeTeamPlayer(Player player) {
+        teamPlayers.remove(player);
     }
 
 }
