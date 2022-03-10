@@ -51,12 +51,11 @@ public class TeamController {
         teamService.addTeamPlayer(teamID, playerID);
     }
 
-   /* @DeleteMapping(path = "{teamID}/remove/{playerID}")
+    @DeleteMapping(path = "{teamID}/remove/{playerID}")
     public void removeTeamPlayer(
             @PathVariable("teamID") Long teamID,
-            @PathVariable("playerID") Long playerID
-            @RequestParam List<Player> teamPlayers) {
+            @PathVariable("playerID") Long playerID) {
         teamService.removeTeamPlayer(teamID, playerID);
-    }*/
+    }
 
 }

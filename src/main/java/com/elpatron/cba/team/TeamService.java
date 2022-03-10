@@ -67,17 +67,25 @@ public class TeamService {
         Optional<Team> teamOptional = teamRepository.findById(teamID);
         Optional<Player> playerOptional = playerRepository.findById(playerID);
         if (teamOptional.isPresent() && playerOptional.isPresent()) {
-            Team existingTeam = teamOptional.get();
-            existingTeam.addTeamPlayer(playerOptional.get());
-            teamRepository.save(existingTeam);
+            Team team = teamOptional.get();
+            Player player = playerOptional.get();
+            team.addTeamPlayer(player);
+            teamRepository.save(team);
         } else {
             throw new IllegalStateException("team or player does not exist");
         }
-
     }
 
-   /* public void removeTeamPlayer(Long teamID, Long playerID) {
-        teamRepository.deleteById(playerID);
-    }*/
-
+    public void removeTeamPlayer(Long teamID, Long playerID) {
+        Optional<Team> teamOptional = teamRepository.findById(teamID);
+        Optional<Player> playerOptional = playerRepository.findById(playerID);
+        if (teamOptional.isPresent() && playerOptional.isPresent()) {
+            Team team = teamOptional.get();
+            Player player = playerOptional.get();
+            team.removeTeamPlayer(player);
+            teamRepository.save(team);
+        } else {
+            throw new IllegalStateException("team or player does not exist");
+        }
+    }
 }
