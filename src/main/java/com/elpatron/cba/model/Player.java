@@ -1,11 +1,13 @@
-package com.elpatron.cba.player;
+package com.elpatron.cba.model;
 
-import com.elpatron.cba.team.Team;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
@@ -25,23 +27,28 @@ public class Player {
     )
     public Long playerID;
 
+    @NotBlank(message = "firstName can not be empty")
     @Column(name = "first_name")
     private String firstName;
 
+    @NotBlank(message = "lastName can not be empty")
     @Column(name = "last_name")
     private String lastName;
 
-    @Column(name = "number")
-    private Integer number;
-
+    @NotBlank(message = "position can not be empty")
     @Column(name = "pos")
     private String pos;
 
-    public Player(String firstName, String lastName, Integer number, String pos) {
+    @Max(99)
+    @NotNull(message = "number can not be empty")
+    @Column(name = "number")
+    private Integer number;
+
+    public Player(String firstName, String lastName, String pos, Integer number) {
         this.firstName = firstName;
         this.lastName = lastName;
-        this.number = number;
         this.pos = pos;
+        this.number = number;
     }
 
 }

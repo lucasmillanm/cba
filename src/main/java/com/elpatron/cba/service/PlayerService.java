@@ -1,15 +1,13 @@
-package com.elpatron.cba.player;
+package com.elpatron.cba.service;
 
-import com.elpatron.cba.team.TeamRepository;
+import com.elpatron.cba.model.Player;
+import com.elpatron.cba.repository.PlayerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
-
-import static com.elpatron.cba.utilities.Functions.notEmpty;
 
 @Service
 public class PlayerService {
@@ -25,40 +23,36 @@ public class PlayerService {
     }
 
     public void addNewPlayer(Player player) {
-        Optional<Player> playerOptional = playerRepository.findPlayerByNumber(player.getNumber());
+       /*Optional<Player> playerOptional = playerRepository.findPlayerByNumber(player.getNumber());
         if (playerOptional.isPresent()) {
             throw new IllegalStateException("number taken");
-        }
+        }*/
         playerRepository.save(player);
     }
 
     @Transactional
-    public void updatePlayer(Long playerID, String firstName, String lastName, Integer number, String pos) {
+    public void updatePlayer(Long playerID, String firstName, String lastName, String pos, Integer number) {
         Player player = playerRepository.findById(playerID)
                 .orElseThrow(() -> new IllegalStateException(
                         "player with id " + playerID + " does not exist"
                 ));
-        if (notEmpty(firstName) &&
-                !Objects.equals(player.getFirstName(), firstName)) {
+        if (!Objects.equals(player.getFirstName(), firstName)) {
             player.setFirstName(firstName);
         }
-        if (notEmpty(lastName) &&
-                !Objects.equals(player.getLastName(), lastName)) {
+        if (!Objects.equals(player.getLastName(), lastName)) {
             player.setLastName(lastName);
         }
-
+        if (!Objects.equals(player.getPos(), pos)) {
+            player.setPos(pos);
+        }
         if (number != null &&
                 !Objects.equals(player.getNumber(), number)) {
-            Optional<Player> studentOptional = playerRepository
+            /*Optional<Player> studentOptional = playerRepository
                     .findPlayerByNumber(number);
             if (studentOptional.isPresent()) {
                 throw new IllegalStateException("number taken");
-            }
+            }*/
             player.setNumber(number);
-        }
-        if (notEmpty(pos) &&
-                !Objects.equals(player.getPos(), pos)) {
-            player.setPos(pos);
         }
     }
 

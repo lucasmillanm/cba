@@ -1,18 +1,24 @@
-package com.elpatron.cba.team;
+package com.elpatron.cba.service;
 
-import com.elpatron.cba.player.Player;
-import com.elpatron.cba.player.PlayerRepository;
+import com.elpatron.cba.dto.TeamDTO;
+import com.elpatron.cba.model.Player;
+import com.elpatron.cba.repository.PlayerRepository;
+import com.elpatron.cba.repository.TeamRepository;
+import com.elpatron.cba.model.Team;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
-import static com.elpatron.cba.utilities.Functions.notEmpty;
+import static com.elpatron.cba.utilities.Checkers.checkIsPresent;
 
 @Service
+@Validated
 public class TeamService {
     private final TeamRepository teamRepository;
     private final PlayerRepository playerRepository;
@@ -23,8 +29,19 @@ public class TeamService {
         this.playerRepository = playerRepository;
     }
 
-    public List<Team> getAllTeams() {
-        return teamRepository.findAll();
+    public List<TeamDTO> getAllTeams() {
+        return teamRepository.findAll()
+                .stream()
+                .map(this::teamDTO)
+                .collect(Collectors.toList());
+    }
+
+    public Optional<Team> getTeamDetails(Long teamID) {
+        return teamRepository.findTeamByTeamID(teamID);
+    }
+
+    private TeamDTO teamDTO(Team team) {
+        return new TeamDTO(team.getTeamID(), team.getTeamCity(), team.getTeamName(), team.getTeamCoach());
     }
 
     public void addNewTeam(Team team) {
@@ -36,21 +53,18 @@ public class TeamService {
     }
 
     @Transactional
-    public void updateTeam(Long teamID, String teamName, String teamCity, String teamCoach) {
+    public void updateTeam(Long teamID, String teamCity, String teamName, String teamCoach) {
         Team team = teamRepository.findById(teamID)
                 .orElseThrow(() -> new IllegalStateException(
                         "player with id " + teamID + " does not exist"
                 ));
-        if (notEmpty(teamName) &&
-                !Objects.equals(team.getTeamName(), teamName)) {
-            team.setTeamName(teamName);
-        }
-        if (notEmpty(teamCity) &&
-                !Objects.equals(team.getTeamCity(), teamCity)) {
+        if (!Objects.equals(team.getTeamCity(), teamCity)) {
             team.setTeamCity(teamCity);
         }
-        if (notEmpty(teamCoach) &&
-                !Objects.equals(team.getTeamCoach(), teamCoach)) {
+        if (!Objects.equals(team.getTeamName(), teamName)) {
+            team.setTeamName(teamName);
+        }
+        if (!Objects.equals(team.getTeamCoach(), teamCoach)) {
             team.setTeamCoach(teamCoach);
         }
     }
@@ -66,7 +80,7 @@ public class TeamService {
     public void addTeamPlayer(Long teamID, Long playerID) {
         Optional<Team> teamOptional = teamRepository.findById(teamID);
         Optional<Player> playerOptional = playerRepository.findById(playerID);
-        if (teamOptional.isPresent() && playerOptional.isPresent()) {
+        if (checkIsPresent(teamOptional, playerOptional)) {
             Team team = teamOptional.get();
             Player player = playerOptional.get();
             team.addTeamPlayer(player);
@@ -79,7 +93,7 @@ public class TeamService {
     public void removeTeamPlayer(Long teamID, Long playerID) {
         Optional<Team> teamOptional = teamRepository.findById(teamID);
         Optional<Player> playerOptional = playerRepository.findById(playerID);
-        if (teamOptional.isPresent() && playerOptional.isPresent()) {
+        if (checkIsPresent(teamOptional, playerOptional)) {
             Team team = teamOptional.get();
             Player player = playerOptional.get();
             team.removeTeamPlayer(player);

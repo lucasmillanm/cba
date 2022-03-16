@@ -1,8 +1,11 @@
-package com.elpatron.cba.player;
+package com.elpatron.cba.controller;
 
+import com.elpatron.cba.model.Player;
+import com.elpatron.cba.service.PlayerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -21,22 +24,30 @@ public class PlayerController {
     }
 
     @PostMapping
-    public void registerNewPlayer(@RequestBody Player player) {
+    public void registerNewPlayer(
+            @Valid
+            @RequestBody Player player
+    ) {
         playerService.addNewPlayer(player);
     }
 
-    @PutMapping(path = "{playerID}")
+    @PutMapping("{playerID}")
     public void updatePlayer(
+            @Valid
             @PathVariable("playerID") Long playerID,
             @RequestParam(required = false) String firstName,
             @RequestParam(required = false) String lastName,
-            @RequestParam(required = false) Integer number,
-            @RequestParam(required = false) String pos) {
-        playerService.updatePlayer(playerID, firstName, lastName, number, pos);
+            @RequestParam(required = false) String pos,
+            @RequestParam(required = false) Integer number
+    ) {
+        playerService.updatePlayer(playerID, firstName, lastName, pos, number);
     }
 
-    @DeleteMapping(path = "{playerID}")
-    public void deletePlayer(@PathVariable("playerID") Long playerID){
+    @DeleteMapping("{playerID}")
+    public void deletePlayer(
+            @Valid
+            @PathVariable("playerID") Long playerID
+    ) {
         playerService.deletePlayer(playerID);
     }
 }

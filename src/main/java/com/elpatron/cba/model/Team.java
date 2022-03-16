@@ -1,11 +1,11 @@
-package com.elpatron.cba.team;
+package com.elpatron.cba.model;
 
-import com.elpatron.cba.player.Player;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,21 +27,24 @@ public class Team {
     )
     private Long teamID;
 
-    @Column(name = "team_name")
-    private String teamName;
-
+    @NotBlank(message = "teamCity can not be empty")
     @Column(name = "team_city")
     private String teamCity;
 
+    @NotBlank(message = "teamName can not be empty")
+    @Column(name = "team_name")
+    private String teamName;
+
+    @NotBlank(message = "teamCoach can not be empty")
     @Column(name = "team_coach")
     private String teamCoach;
 
     @OneToMany
     private List<Player> teamPlayers = new ArrayList<>();
 
-    public Team(String teamName, String teamCity, String teamCoach, List<Player> teamPlayers) {
-        this.teamName = teamName;
+    public Team(String teamCity, String teamName,String teamCoach, List<Player> teamPlayers) {
         this.teamCity = teamCity;
+        this.teamName = teamName;
         this.teamCoach = teamCoach;
         this.teamPlayers = teamPlayers;
     }
