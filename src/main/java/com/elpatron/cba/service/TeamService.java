@@ -4,9 +4,9 @@ import com.elpatron.cba.dto.TeamDTO;
 import com.elpatron.cba.exception.BadRequestException;
 import com.elpatron.cba.exception.NotFoundException;
 import com.elpatron.cba.model.Player;
+import com.elpatron.cba.model.Team;
 import com.elpatron.cba.repository.PlayerRepository;
 import com.elpatron.cba.repository.TeamRepository;
-import com.elpatron.cba.model.Team;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +20,8 @@ import static com.elpatron.cba.utilities.Checkers.checkIsPresent;
 
 @Service
 public class TeamService {
+    public static final String TEAM_WITH_ID_D_NOT_FOUND = "team with id %d not found";
+    public static final String TEAM_WITH_ID_D_OR_PLAYER_WITH_ID_S_NOT_FOUND = "team with id %d or player with id %s not found";
     private final TeamRepository teamRepository;
     private final PlayerRepository playerRepository;
 
@@ -39,7 +41,7 @@ public class TeamService {
     public Team getTeamDetails(Long teamID) {
         Optional<Team> teamOptional = teamRepository.findById(teamID);
         if (!teamOptional.isPresent()) {
-            throw new NotFoundException("team with id " + teamID + " not found");
+            throw new NotFoundException(String.format(TEAM_WITH_ID_D_NOT_FOUND, teamID));
         }
         return teamOptional.get();
     }
@@ -60,7 +62,7 @@ public class TeamService {
     public void updateTeam(Long teamID, String teamCity, String teamName, String teamCoach) {
         Team team = teamRepository.findById(teamID)
                 .orElseThrow(() -> new NotFoundException(
-                        "team with id " + teamID + " does not exist"
+                        String.format(TEAM_WITH_ID_D_NOT_FOUND, teamID)
                 ));
         if (!Objects.equals(team.getTeamCity(), teamCity)) {
             team.setTeamCity(teamCity);
@@ -76,7 +78,7 @@ public class TeamService {
     public void deleteTeam(Long teamID) {
         boolean exists = teamRepository.existsById(teamID);
         if (!exists) {
-            throw new NotFoundException("team with id " + teamID + " does not exist");
+            throw new NotFoundException(String.format(TEAM_WITH_ID_D_NOT_FOUND, teamID));
         }
         teamRepository.deleteById(teamID);
     }
@@ -90,7 +92,7 @@ public class TeamService {
             team.addTeamPlayer(player);
             teamRepository.save(team);
         } else {
-            throw new NotFoundException("team with id " + teamID + "or player with id " + playerID + "does not exist");
+            throw new NotFoundException(String.format(TEAM_WITH_ID_D_OR_PLAYER_WITH_ID_S_NOT_FOUND, teamID, playerID));
         }
     }
 
@@ -103,7 +105,7 @@ public class TeamService {
             team.removeTeamPlayer(player);
             teamRepository.save(team);
         } else {
-            throw new NotFoundException("team with id " + teamID + "or player with id " + playerID + "does not exist");
+            throw new NotFoundException(String.format(TEAM_WITH_ID_D_OR_PLAYER_WITH_ID_S_NOT_FOUND, teamID, playerID));
         }
     }
 }

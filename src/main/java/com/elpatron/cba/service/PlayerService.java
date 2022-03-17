@@ -12,6 +12,7 @@ import java.util.Objects;
 
 @Service
 public class PlayerService {
+    public static final String PLAYER_WITH_ID_D_NOT_FOUND = "player with id %d not found";
     private final PlayerRepository playerRepository;
 
     @Autowired
@@ -31,7 +32,7 @@ public class PlayerService {
     public void updatePlayer(Long playerID, String firstName, String lastName, String pos, Integer number) {
         Player player = playerRepository.findById(playerID)
                 .orElseThrow(() -> new NotFoundException(
-                        "player with id " + playerID + " does not exist"
+                        String.format(PLAYER_WITH_ID_D_NOT_FOUND, playerID)
                 ));
         if (!Objects.equals(player.getFirstName(), firstName)) {
             player.setFirstName(firstName);
@@ -52,7 +53,7 @@ public class PlayerService {
     public void deletePlayer(Long playerID) {
         boolean exists = playerRepository.existsById(playerID);
         if (!exists) {
-            throw new NotFoundException("player with id " + playerID + " does not exist");
+            throw new NotFoundException(String.format(PLAYER_WITH_ID_D_NOT_FOUND, playerID));
         }
         playerRepository.deleteById(playerID);
     }
