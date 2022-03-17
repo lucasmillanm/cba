@@ -42,7 +42,7 @@ public class Team {
     @OneToMany
     private List<Player> teamPlayers = new ArrayList<>();
 
-    public Team(String teamCity, String teamName,String teamCoach, List<Player> teamPlayers) {
+    public Team(String teamCity, String teamName, String teamCoach, List<Player> teamPlayers) {
         this.teamCity = teamCity;
         this.teamName = teamName;
         this.teamCoach = teamCoach;
