@@ -5,7 +5,6 @@ import com.elpatron.cba.service.PlayerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -25,7 +24,6 @@ public class PlayerController {
 
     @PostMapping
     public void registerNewPlayer(
-            @Valid
             @RequestBody Player player
     ) {
         playerService.addNewPlayer(player);
@@ -33,7 +31,6 @@ public class PlayerController {
 
     @PutMapping("{playerID}")
     public void updatePlayer(
-            @Valid
             @PathVariable("playerID") Long playerID,
             @RequestParam(required = false) String firstName,
             @RequestParam(required = false) String lastName,
@@ -45,7 +42,6 @@ public class PlayerController {
 
     @DeleteMapping("delete/{playerID}")
     public void deletePlayer(
-            @Valid
             @PathVariable("playerID") Long playerID
     ) {
         playerService.deletePlayer(playerID);
