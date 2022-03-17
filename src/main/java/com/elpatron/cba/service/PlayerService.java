@@ -39,7 +39,6 @@ public class PlayerService {
         }
         if (!Objects.equals(player.getLastName(), lastName)) {
             player.setLastName(lastName);
-
         }
         if (!Objects.equals(player.getPos(), pos)) {
             player.setPos(pos);

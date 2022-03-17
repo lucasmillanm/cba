@@ -22,6 +22,7 @@ import static com.elpatron.cba.utilities.Checkers.checkIsPresent;
 public class TeamService {
     public static final String TEAM_WITH_ID_D_NOT_FOUND = "team with id %d not found";
     public static final String TEAM_WITH_ID_D_OR_PLAYER_WITH_ID_S_NOT_FOUND = "team with id %d or player with id %s not found";
+    public static final String TEAM_ALREADY_EXISTS = "team already exists";
     private final TeamRepository teamRepository;
     private final PlayerRepository playerRepository;
 
@@ -51,9 +52,8 @@ public class TeamService {
     }
 
     public void addNewTeam(Team team) {
-        Optional<Team> teamOptional = teamRepository.findTeamByName(team.getTeamName());
-        if (teamOptional.isPresent()) {
-            throw new BadRequestException("team already exists");
+        if (teamRepository.existsTeamByTeamName(team.getTeamName())) {
+            throw new BadRequestException(String.format(TEAM_ALREADY_EXISTS));
         }
         teamRepository.save(team);
     }
@@ -64,6 +64,7 @@ public class TeamService {
                 .orElseThrow(() -> new NotFoundException(
                         String.format(TEAM_WITH_ID_D_NOT_FOUND, teamID)
                 ));
+
         if (!Objects.equals(team.getTeamCity(), teamCity)) {
             team.setTeamCity(teamCity);
         }
@@ -73,6 +74,7 @@ public class TeamService {
         if (!Objects.equals(team.getTeamCoach(), teamCoach)) {
             team.setTeamCoach(teamCoach);
         }
+
     }
 
     public void deleteTeam(Long teamID) {
