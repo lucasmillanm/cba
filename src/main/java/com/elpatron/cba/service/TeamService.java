@@ -37,7 +37,7 @@ public class TeamService {
     }
 
     public Team getTeamDetails(Long teamID) {
-        Optional<Team> teamOptional = teamRepository.findTeamByTeamID(teamID);
+        Optional<Team> teamOptional = teamRepository.findById(teamID);
         if (!teamOptional.isPresent()) {
             throw new NotFoundException("team with id " + teamID + " not found");
         }

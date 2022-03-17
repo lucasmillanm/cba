@@ -11,5 +11,4 @@ import java.util.Optional;
 public interface TeamRepository extends JpaRepository<Team, Long> {
     @Query("select s from Team s where s.teamName = ?1")
     Optional<Team> findTeamByName(String teamName);
-    Optional<Team> findTeamByTeamID(Long id);
 }

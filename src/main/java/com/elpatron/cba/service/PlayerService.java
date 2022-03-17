@@ -24,10 +24,6 @@ public class PlayerService {
     }
 
     public void addNewPlayer(Player player) {
-       /*Optional<Player> playerOptional = playerRepository.findPlayerByNumber(player.getNumber());
-        if (playerOptional.isPresent()) {
-            throw new IllegalStateException("number taken");
-        }*/
         playerRepository.save(player);
     }
 
@@ -49,11 +45,6 @@ public class PlayerService {
         }
         if (number != null &&
                 !Objects.equals(player.getNumber(), number)) {
-            /*Optional<Player> studentOptional = playerRepository
-                    .findPlayerByNumber(number);
-            if (studentOptional.isPresent()) {
-                throw new IllegalStateException("number taken");
-            }*/
             player.setNumber(number);
         }
     }

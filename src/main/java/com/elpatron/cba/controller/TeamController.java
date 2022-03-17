@@ -45,12 +45,8 @@ public class TeamController {
             @PathVariable("teamID") Long teamID,
             @RequestParam(required = false) String teamCity,
             @RequestParam(required = false) String teamName,
-            @RequestParam(required = false) String teamCoach/*,
-            BindingResult result*/
+            @RequestParam(required = false) String teamCoach
     ) {
-        /*if(result.hasErrors()){
-            return null;
-        }*/
         teamService.updateTeam(teamID, teamCity, teamName, teamCoach);
     }
 
