@@ -43,7 +43,7 @@ public class PlayerController {
         playerService.updatePlayer(playerID, firstName, lastName, pos, number);
     }
 
-    @DeleteMapping("{playerID}")
+    @DeleteMapping("delete/{playerID}")
     public void deletePlayer(
             @Valid
             @PathVariable("playerID") Long playerID

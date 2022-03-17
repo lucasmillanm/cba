@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/cba/teams")
@@ -26,7 +25,7 @@ public class TeamController {
     }
 
     @GetMapping("{teamID}/details")
-    public Optional<Team> showTeamDetails(
+    public Team showTeamDetails(
             @PathVariable("teamID") Long teamID
     ) {
         return teamService.getTeamDetails(teamID);
@@ -47,16 +46,18 @@ public class TeamController {
             @RequestParam(required = false) String teamCity,
             @RequestParam(required = false) String teamName,
             @RequestParam(required = false) String teamCoach/*,
-            BindingResult bindingResult*/
+            BindingResult result*/
     ) {
-        /*if(bindingResult.hasErrors()){
+        /*if(result.hasErrors()){
             return null;
         }*/
         teamService.updateTeam(teamID, teamCity, teamName, teamCoach);
     }
 
-    @DeleteMapping("{teamID}")
-    public void deleteTeam(@Valid @PathVariable("teamID") Long teamID
+    @DeleteMapping("delete/{teamID}")
+    public void deleteTeam(
+            @Valid
+            @PathVariable("teamID") Long teamID
     ) {
         teamService.deleteTeam(teamID);
     }

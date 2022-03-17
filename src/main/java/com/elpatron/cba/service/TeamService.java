@@ -1,13 +1,14 @@
 package com.elpatron.cba.service;
 
 import com.elpatron.cba.dto.TeamDTO;
+import com.elpatron.cba.exception.BadRequestException;
+import com.elpatron.cba.exception.NotFoundException;
 import com.elpatron.cba.model.Player;
 import com.elpatron.cba.repository.PlayerRepository;
 import com.elpatron.cba.repository.TeamRepository;
 import com.elpatron.cba.model.Team;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.annotation.Validated;
 
 import javax.transaction.Transactional;
 import java.util.List;
@@ -18,7 +19,6 @@ import java.util.stream.Collectors;
 import static com.elpatron.cba.utilities.Checkers.checkIsPresent;
 
 @Service
-@Validated
 public class TeamService {
     private final TeamRepository teamRepository;
     private final PlayerRepository playerRepository;
@@ -36,8 +36,12 @@ public class TeamService {
                 .collect(Collectors.toList());
     }
 
-    public Optional<Team> getTeamDetails(Long teamID) {
-        return teamRepository.findTeamByTeamID(teamID);
+    public Team getTeamDetails(Long teamID) {
+        Optional<Team> teamOptional = teamRepository.findTeamByTeamID(teamID);
+        if (!teamOptional.isPresent()) {
+            throw new NotFoundException("team with id " + teamID + " not found");
+        }
+        return teamOptional.get();
     }
 
     private TeamDTO teamDTO(Team team) {
@@ -47,7 +51,7 @@ public class TeamService {
     public void addNewTeam(Team team) {
         Optional<Team> teamOptional = teamRepository.findTeamByName(team.getTeamName());
         if (teamOptional.isPresent()) {
-            throw new IllegalStateException("team already exists");
+            throw new BadRequestException("team already exists");
         }
         teamRepository.save(team);
     }
@@ -55,8 +59,8 @@ public class TeamService {
     @Transactional
     public void updateTeam(Long teamID, String teamCity, String teamName, String teamCoach) {
         Team team = teamRepository.findById(teamID)
-                .orElseThrow(() -> new IllegalStateException(
-                        "player with id " + teamID + " does not exist"
+                .orElseThrow(() -> new NotFoundException(
+                        "team with id " + teamID + " does not exist"
                 ));
         if (!Objects.equals(team.getTeamCity(), teamCity)) {
             team.setTeamCity(teamCity);
@@ -72,7 +76,7 @@ public class TeamService {
     public void deleteTeam(Long teamID) {
         boolean exists = teamRepository.existsById(teamID);
         if (!exists) {
-            throw new IllegalStateException("team with id " + teamID + " does not exist");
+            throw new NotFoundException("team with id " + teamID + " does not exist");
         }
         teamRepository.deleteById(teamID);
     }
@@ -86,7 +90,7 @@ public class TeamService {
             team.addTeamPlayer(player);
             teamRepository.save(team);
         } else {
-            throw new IllegalStateException("team or player does not exist");
+            throw new NotFoundException("team with id " + teamID + "or player with id " + playerID + "does not exist");
         }
     }
 
@@ -99,7 +103,7 @@ public class TeamService {
             team.removeTeamPlayer(player);
             teamRepository.save(team);
         } else {
-            throw new IllegalStateException("team or player does not exist");
+            throw new NotFoundException("team with id " + teamID + "or player with id " + playerID + "does not exist");
         }
     }
 }
