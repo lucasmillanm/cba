@@ -6,7 +6,6 @@ import com.elpatron.cba.service.TeamService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -33,7 +32,6 @@ public class TeamController {
 
     @PostMapping
     public void registerNewTeam(
-            @Valid
             @RequestBody Team team
     ) {
         teamService.addNewTeam(team);
@@ -41,7 +39,6 @@ public class TeamController {
 
     @PutMapping("{teamID}")
     public void updateTeam(
-            @Valid
             @PathVariable("teamID") Long teamID,
             @RequestParam(required = false) String teamCity,
             @RequestParam(required = false) String teamName,
@@ -52,7 +49,6 @@ public class TeamController {
 
     @DeleteMapping("delete/{teamID}")
     public void deleteTeam(
-            @Valid
             @PathVariable("teamID") Long teamID
     ) {
         teamService.deleteTeam(teamID);
@@ -60,7 +56,6 @@ public class TeamController {
 
     @PostMapping("{teamID}/add/{playerID}")
     public void addTeamPlayer(
-            @Valid
             @PathVariable("teamID") Long teamID,
             @PathVariable("playerID") Long playerID
     ) {
@@ -69,7 +64,6 @@ public class TeamController {
 
     @DeleteMapping("{teamID}/remove/{playerID}")
     public void removeTeamPlayer(
-            @Valid
             @PathVariable("teamID") Long teamID,
             @PathVariable("playerID") Long playerID
     ) {
