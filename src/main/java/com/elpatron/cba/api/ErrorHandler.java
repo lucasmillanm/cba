@@ -14,10 +14,13 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @RestController
 public class ErrorHandler extends ResponseEntityExceptionHandler {
 
+    public static final int NOT_FOUND = 101;
+    public static final int BAD_REQUEST = 102;
+
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<ApplicationError> handleNotFoundException(NotFoundException exception) {
         ApplicationError error = new ApplicationError();
-        error.setCode(101);
+        error.setCode(NOT_FOUND);
         error.setMessage(exception.getMessage());
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }
@@ -25,7 +28,7 @@ public class ErrorHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(BadRequestException.class)
     public ResponseEntity<ApplicationError> handleBadRequestException(BadRequestException exception) {
         ApplicationError error = new ApplicationError();
-        error.setCode(102);
+        error.setCode(BAD_REQUEST);
         error.setMessage(exception.getMessage());
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
