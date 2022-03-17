@@ -6,6 +6,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
@@ -39,6 +40,7 @@ public class Player {
     @Column(name = "pos")
     private String pos;
 
+    @Min(0)
     @Max(99)
     @NotNull(message = "number can not be empty")
     @Column(name = "number")
