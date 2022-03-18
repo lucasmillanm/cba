@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 public class PlayerService {
@@ -22,6 +23,14 @@ public class PlayerService {
 
     public List<Player> getAllPlayers() {
         return playerRepository.findAll();
+    }
+
+    public Player getPlayerDetails(Long playerID) {
+        Optional<Player> playerOptional = playerRepository.findById(playerID);
+        if (!playerOptional.isPresent()) {
+            throw new NotFoundException(String.format(PLAYER_WITH_ID_D_NOT_FOUND, playerID));
+        }
+        return playerOptional.get();
     }
 
     public void addNewPlayer(Player player) {
