@@ -57,7 +57,7 @@ public class TeamService {
         }
         teamRepository.save(team);
     }
-    
+
     @Transactional
     public Team updateTeam(Team team, Long teamID) {
         Team existingTeam = teamRepository.findById(teamID)
