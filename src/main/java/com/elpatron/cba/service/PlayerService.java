@@ -52,8 +52,7 @@ public class PlayerService {
         if (!Objects.equals(player.getPos(), pos)) {
             player.setPos(pos);
         }
-        if (number != null &&
-                !Objects.equals(player.getNumber(), number)) {
+        if (!Objects.equals(player.getNumber(), number)) {
             player.setNumber(number);
         }
     }

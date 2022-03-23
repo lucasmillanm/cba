@@ -52,5 +52,4 @@ public class Player {
         this.pos = pos;
         this.number = number;
     }
-
 }
