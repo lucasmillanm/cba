@@ -48,7 +48,7 @@ public class TeamService {
     }
 
     private TeamDTO teamDTO(Team team) {
-        return new TeamDTO(team.getTeamID(), team.getTeamCity(), team.getTeamName(), team.getTeamCoach());
+        return new TeamDTO(team.getTeamID(), team.getTeamCity(), team.getTeamName());
     }
 
     public void addNewTeam(Team team) {
@@ -69,12 +69,15 @@ public class TeamService {
             team.setTeamCity(teamCity);
         }
         if (!Objects.equals(team.getTeamName(), teamName)) {
-            team.setTeamName(teamName);
+            if (teamRepository.existsTeamByTeamName(teamName)) {
+                throw new BadRequestException(String.format(TEAM_ALREADY_EXISTS, teamID));
+            } else {
+                team.setTeamName(teamName);
+            }
         }
         if (!Objects.equals(team.getTeamCoach(), teamCoach)) {
             team.setTeamCoach(teamCoach);
         }
-
     }
 
     public void deleteTeam(Long teamID) {
