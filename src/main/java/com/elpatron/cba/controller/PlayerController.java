@@ -36,7 +36,7 @@ public class PlayerController {
         playerService.addNewPlayer(player);
     }
 
-    @PutMapping("{playerID}")
+    @PutMapping("edit/{playerID}")
     public void updatePlayer(
             @PathVariable("playerID") Long playerID,
             @RequestParam(required = false) String firstName,
