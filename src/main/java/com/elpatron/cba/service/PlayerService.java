@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -38,23 +37,15 @@ public class PlayerService {
     }
 
     @Transactional
-    public void updatePlayer(Long playerID, String firstName, String lastName, String pos, Integer number) {
-        Player player = playerRepository.findById(playerID)
+    public void updatePlayer(Player player, Long playerID) {
+        Player existingPlayer = playerRepository.findById(playerID)
                 .orElseThrow(() -> new NotFoundException(
                         String.format(PLAYER_WITH_ID_D_NOT_FOUND, playerID)
                 ));
-        if (!Objects.equals(player.getFirstName(), firstName)) {
-            player.setFirstName(firstName);
-        }
-        if (!Objects.equals(player.getLastName(), lastName)) {
-            player.setLastName(lastName);
-        }
-        if (!Objects.equals(player.getPos(), pos)) {
-            player.setPos(pos);
-        }
-        if (!Objects.equals(player.getNumber(), number)) {
-            player.setNumber(number);
-        }
+        existingPlayer.setFirstName(player.getFirstName());
+        existingPlayer.setLastName(player.getLastName());
+        existingPlayer.setPos(player.getPos());
+        existingPlayer.setNumber(player.getNumber());
     }
 
     public void deletePlayer(Long playerID) {

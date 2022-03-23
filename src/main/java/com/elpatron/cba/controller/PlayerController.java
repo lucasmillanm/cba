@@ -39,12 +39,9 @@ public class PlayerController {
     @PutMapping("edit/{playerID}")
     public void updatePlayer(
             @PathVariable("playerID") Long playerID,
-            @RequestParam(required = false) String firstName,
-            @RequestParam(required = false) String lastName,
-            @RequestParam(required = false) String pos,
-            @RequestParam(required = false) Integer number
+            @RequestBody Player player
     ) {
-        playerService.updatePlayer(playerID, firstName, lastName, pos, number);
+        playerService.updatePlayer(player, playerID);
     }
 
     @DeleteMapping("delete/{playerID}")

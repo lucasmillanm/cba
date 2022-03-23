@@ -57,27 +57,24 @@ public class TeamService {
         }
         teamRepository.save(team);
     }
-
+    
     @Transactional
-    public void updateTeam(Long teamID, String teamCity, String teamName, String teamCoach) {
-        Team team = teamRepository.findById(teamID)
+    public Team updateTeam(Team team, Long teamID) {
+        Team existingTeam = teamRepository.findById(teamID)
                 .orElseThrow(() -> new NotFoundException(
                         String.format(TEAM_WITH_ID_D_NOT_FOUND, teamID)
                 ));
-
-        if (!Objects.equals(team.getTeamCity(), teamCity)) {
-            team.setTeamCity(teamCity);
-        }
-        if (!Objects.equals(team.getTeamName(), teamName)) {
-            if (teamRepository.existsTeamByTeamName(teamName)) {
-                throw new BadRequestException(String.format(TEAM_ALREADY_EXISTS, teamID));
+        existingTeam.setTeamCity(team.getTeamCity());
+        if (!Objects.equals(existingTeam.getTeamName(), team.getTeamName())) {
+            if (teamRepository.existsTeamByTeamName(team.getTeamName())) {
+                throw new BadRequestException(String.format(TEAM_ALREADY_EXISTS));
             } else {
-                team.setTeamName(teamName);
+                existingTeam.setTeamName(team.getTeamName());
             }
         }
-        if (!Objects.equals(team.getTeamCoach(), teamCoach)) {
-            team.setTeamCoach(teamCoach);
-        }
+        existingTeam.setTeamCoach(team.getTeamCoach());
+        teamRepository.save(existingTeam);
+        return existingTeam;
     }
 
     public void deleteTeam(Long teamID) {
