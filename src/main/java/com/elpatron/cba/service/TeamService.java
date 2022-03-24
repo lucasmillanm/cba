@@ -53,7 +53,7 @@ public class TeamService {
 
     public void addNewTeam(Team team) {
         if (teamRepository.existsTeamByTeamName(team.getTeamName())) {
-            throw new BadRequestException(String.format(TEAM_ALREADY_EXISTS));
+            throw new BadRequestException(TEAM_ALREADY_EXISTS);
         }
         teamRepository.save(team);
     }
@@ -67,7 +67,7 @@ public class TeamService {
         existingTeam.setTeamCity(team.getTeamCity());
         if (!Objects.equals(existingTeam.getTeamName(), team.getTeamName())) {
             if (teamRepository.existsTeamByTeamName(team.getTeamName())) {
-                throw new BadRequestException(String.format(TEAM_ALREADY_EXISTS));
+                throw new BadRequestException(TEAM_ALREADY_EXISTS);
             } else {
                 existingTeam.setTeamName(team.getTeamName());
             }
