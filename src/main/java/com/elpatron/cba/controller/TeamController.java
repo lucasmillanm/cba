@@ -23,7 +23,7 @@ public class TeamController {
         return teamService.getAllTeams();
     }
 
-    @GetMapping("{teamID}/details")
+    @GetMapping("{teamID}")
     public Team showTeamDetails(
             @PathVariable("teamID") Long teamID
     ) {

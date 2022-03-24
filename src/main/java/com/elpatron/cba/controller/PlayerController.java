@@ -22,7 +22,7 @@ public class PlayerController {
         return playerService.getAllPlayers();
     }
 
-    @GetMapping("{playerID}/details")
+    @GetMapping("{playerID}")
     public Player showTeamDetails(
             @PathVariable("playerID") Long playerID
     ) {
