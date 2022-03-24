@@ -29,7 +29,7 @@ public class PlayerController {
         return playerService.getPlayerDetails(playerID);
     }
 
-    @PostMapping
+    @PostMapping("add")
     public void registerNewPlayer(
             @RequestBody Player player
     ) {

@@ -30,7 +30,7 @@ public class TeamController {
         return teamService.getTeamDetails(teamID);
     }
 
-    @PostMapping
+    @PostMapping("add")
     public void registerNewTeam(
             @RequestBody Team team
     ) {
