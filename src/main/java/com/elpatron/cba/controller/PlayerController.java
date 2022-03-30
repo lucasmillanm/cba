@@ -23,7 +23,7 @@ public class PlayerController {
     }
 
     @GetMapping("{playerID}")
-    public Player showTeamDetails(
+    public Player showPlayerDetails(
             @PathVariable("playerID") Long playerID
     ) {
         return playerService.getPlayerDetails(playerID);
