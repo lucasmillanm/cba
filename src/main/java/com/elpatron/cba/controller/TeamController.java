@@ -37,7 +37,7 @@ public class TeamController {
         teamService.addNewTeam(team);
     }
 
-    @PutMapping("edit/{teamID}")
+    @PutMapping("update/{teamID}")
     public void updateTeam(
             @PathVariable("teamID") Long teamID,
             @RequestBody Team team

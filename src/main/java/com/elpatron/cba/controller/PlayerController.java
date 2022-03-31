@@ -36,12 +36,12 @@ public class PlayerController {
         playerService.addNewPlayer(player);
     }
 
-    @PutMapping("edit/{playerID}")
+    @PutMapping("update/{playerID}")
     public void updatePlayer(
             @PathVariable("playerID") Long playerID,
             @RequestBody Player player
     ) {
-        playerService.updatePlayer(player, playerID);
+        playerService.updatePlayer(playerID, player);
     }
 
     @DeleteMapping("delete/{playerID}")

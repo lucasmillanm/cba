@@ -37,7 +37,7 @@ public class PlayerService {
     }
 
     @Transactional
-    public void updatePlayer(Player player, Long playerID) {
+    public void updatePlayer(Long playerID, Player player) {
         Player existingPlayer = playerRepository.findById(playerID)
                 .orElseThrow(() -> new NotFoundException(
                         String.format(PLAYER_WITH_ID_D_NOT_FOUND, playerID)
