@@ -27,15 +27,15 @@ public class Team {
     )
     private Long teamID;
 
-    @NotBlank(message = "teamCity can not be empty")
+    @NotBlank(message = "teamCity cannot be empty")
     @Column(name = "team_city")
     private String teamCity;
 
-    @NotBlank(message = "teamName can not be empty")
+    @NotBlank(message = "teamName cannot be empty")
     @Column(name = "team_name")
     private String teamName;
 
-    @NotBlank(message = "teamCoach can not be empty")
+    @NotBlank(message = "teamCoach cannot be empty")
     @Column(name = "team_coach")
     private String teamCoach;
 
@@ -56,5 +56,4 @@ public class Team {
     public void removeTeamPlayer(Player player) {
         teamPlayers.remove(player);
     }
-
 }
