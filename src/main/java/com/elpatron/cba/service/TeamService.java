@@ -39,6 +39,13 @@ public class TeamService {
                 .collect(Collectors.toList());
     }
 
+    public List<Player> getValidPlayers() {
+        return playerRepository.findAll()
+                .stream()
+                .filter(player -> !player.isInTeam())
+                .collect(Collectors.toList());
+    }
+
     public Team getTeamDetails(Long teamID) {
         Optional<Team> teamOptional = teamRepository.findById(teamID);
         if (!teamOptional.isPresent()) {
@@ -59,7 +66,7 @@ public class TeamService {
     }
 
     @Transactional
-    public Team updateTeam(Team team, Long teamID) {
+    public void updateTeam(Team team, Long teamID) {
         Team existingTeam = teamRepository.findById(teamID)
                 .orElseThrow(() -> new NotFoundException(
                         String.format(TEAM_WITH_ID_D_NOT_FOUND, teamID)
@@ -74,7 +81,6 @@ public class TeamService {
         }
         existingTeam.setTeamCoach(team.getTeamCoach());
         teamRepository.save(existingTeam);
-        return existingTeam;
     }
 
     public void deleteTeam(Long teamID) {
@@ -93,6 +99,7 @@ public class TeamService {
             Player player = playerOptional.get();
             team.addTeamPlayer(player);
             teamRepository.save(team);
+            player.setInTeam(true);
         } else {
             throw new NotFoundException(String.format(TEAM_WITH_ID_D_OR_PLAYER_WITH_ID_S_NOT_FOUND, teamID, playerID));
         }
@@ -106,6 +113,7 @@ public class TeamService {
             Player player = playerOptional.get();
             team.removeTeamPlayer(player);
             teamRepository.save(team);
+            player.setInTeam(false);
         } else {
             throw new NotFoundException(String.format(TEAM_WITH_ID_D_OR_PLAYER_WITH_ID_S_NOT_FOUND, teamID, playerID));
         }
