@@ -1,6 +1,7 @@
 package com.elpatron.cba.controller;
 
 import com.elpatron.cba.dto.TeamDTO;
+import com.elpatron.cba.model.Player;
 import com.elpatron.cba.model.Team;
 import com.elpatron.cba.service.TeamService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,11 @@ public class TeamController {
     @GetMapping
     public List<TeamDTO> getAllTeams() {
         return teamService.getAllTeams();
+    }
+
+    @GetMapping("validPlayers")
+    public List<Player> getValidPlayers() {
+        return teamService.getValidPlayers();
     }
 
     @GetMapping("{teamID}")
