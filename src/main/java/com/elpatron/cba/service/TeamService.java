@@ -42,7 +42,7 @@ public class TeamService {
     public List<Player> getValidPlayers() {
         return playerRepository.findAll()
                 .stream()
-                .filter(player -> !player.isInTeam())
+                .filter(Player::isValid)
                 .collect(Collectors.toList());
     }
 
@@ -99,7 +99,7 @@ public class TeamService {
             Player player = playerOptional.get();
             team.addTeamPlayer(player);
             teamRepository.save(team);
-            player.setInTeam(true);
+            player.setValid(false);
         } else {
             throw new NotFoundException(String.format(TEAM_WITH_ID_D_OR_PLAYER_WITH_ID_S_NOT_FOUND, teamID, playerID));
         }
@@ -113,7 +113,7 @@ public class TeamService {
             Player player = playerOptional.get();
             team.removeTeamPlayer(player);
             teamRepository.save(team);
-            player.setInTeam(false);
+            player.setValid(true);
         } else {
             throw new NotFoundException(String.format(TEAM_WITH_ID_D_OR_PLAYER_WITH_ID_S_NOT_FOUND, teamID, playerID));
         }
