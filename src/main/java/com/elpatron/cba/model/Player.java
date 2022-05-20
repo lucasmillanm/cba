@@ -28,28 +28,32 @@ public class Player {
     )
     public Long playerID;
 
-    @NotBlank(message = "firstName can not be empty")
+    @NotBlank(message = "firstName cannot be empty")
     @Column(name = "first_name")
     private String firstName;
 
-    @NotBlank(message = "lastName can not be empty")
+    @NotBlank(message = "lastName cannot be empty")
     @Column(name = "last_name")
     private String lastName;
 
-    @NotBlank(message = "position can not be empty")
+    @NotBlank(message = "position cannot be empty")
     @Column(name = "pos")
     private String pos;
 
     @Min(0)
     @Max(99)
-    @NotNull(message = "number can not be empty")
+    @NotNull(message = "number cannot be empty")
     @Column(name = "number")
-    private Integer number;
+    private int number;
 
-    public Player(String firstName, String lastName, String pos, Integer number) {
+    @Column(name = "is_valid")
+    private boolean isValid = true;
+
+    public Player(String firstName, String lastName, String pos, int number, boolean isValid) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.pos = pos;
         this.number = number;
+        this.isValid = isValid;
     }
 }
