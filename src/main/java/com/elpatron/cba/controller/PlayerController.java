@@ -22,6 +22,11 @@ public class PlayerController {
         return playerService.getAllPlayers();
     }
 
+    @GetMapping("validPlayers")
+    public List<Player> getValidPlayers() {
+        return playerService.getValidPlayers();
+    }
+
     @GetMapping("{playerID}")
     public Player showPlayerDetails(
             @PathVariable("playerID") Long playerID

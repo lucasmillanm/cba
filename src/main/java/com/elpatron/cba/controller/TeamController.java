@@ -24,11 +24,6 @@ public class TeamController {
         return teamService.getAllTeams();
     }
 
-    @GetMapping("validPlayers")
-    public List<Player> getValidPlayers() {
-        return teamService.getValidPlayers();
-    }
-
     @GetMapping("{teamID}")
     public Team showTeamDetails(
             @PathVariable("teamID") Long teamID
