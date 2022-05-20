@@ -98,8 +98,8 @@ public class TeamService {
             Team team = teamOptional.get();
             Player player = playerOptional.get();
             team.addTeamPlayer(player);
-            teamRepository.save(team);
             player.setValid(false);
+            teamRepository.save(team);
         } else {
             throw new NotFoundException(String.format(TEAM_WITH_ID_D_OR_PLAYER_WITH_ID_S_NOT_FOUND, teamID, playerID));
         }
@@ -112,8 +112,8 @@ public class TeamService {
             Team team = teamOptional.get();
             Player player = playerOptional.get();
             team.removeTeamPlayer(player);
-            teamRepository.save(team);
             player.setValid(true);
+            teamRepository.save(team);
         } else {
             throw new NotFoundException(String.format(TEAM_WITH_ID_D_OR_PLAYER_WITH_ID_S_NOT_FOUND, teamID, playerID));
         }
