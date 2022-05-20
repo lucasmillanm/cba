@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class PlayerService {
@@ -22,6 +23,13 @@ public class PlayerService {
 
     public List<Player> getAllPlayers() {
         return playerRepository.findAll();
+    }
+
+    public List<Player> getValidPlayers() {
+        return playerRepository.findAll()
+                .stream()
+                .filter(Player::isValid)
+                .collect(Collectors.toList());
     }
 
     public Player getPlayerDetails(Long playerID) {

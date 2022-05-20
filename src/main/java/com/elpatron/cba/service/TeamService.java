@@ -39,13 +39,6 @@ public class TeamService {
                 .collect(Collectors.toList());
     }
 
-    public List<Player> getValidPlayers() {
-        return playerRepository.findAll()
-                .stream()
-                .filter(Player::isValid)
-                .collect(Collectors.toList());
-    }
-
     public Team getTeamDetails(Long teamID) {
         Optional<Team> teamOptional = teamRepository.findById(teamID);
         if (!teamOptional.isPresent()) {
