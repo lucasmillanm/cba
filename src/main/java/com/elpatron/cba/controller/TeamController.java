@@ -52,12 +52,12 @@ public class TeamController {
         teamService.deleteTeam(teamID);
     }
 
-    @PostMapping("{teamID}/add/{playerID}")
-    public void addTeamPlayer(
+    @PostMapping("{teamID}/add")
+    public void addTeamPlayers(
             @PathVariable("teamID") Long teamID,
-            @PathVariable("playerID") Long playerID
+            @RequestBody List<Long> playerIDs
     ) {
-        teamService.addTeamPlayer(teamID, playerID);
+        teamService.addTeamPlayers(teamID, playerIDs);
     }
 
     @DeleteMapping("{teamID}/remove/{playerID}")
