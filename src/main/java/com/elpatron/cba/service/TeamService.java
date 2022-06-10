@@ -23,6 +23,7 @@ public class TeamService {
     public static final String TEAM_WITH_ID_D_NOT_FOUND = "team with id %d not found";
     public static final String TEAM_WITH_ID_D_OR_PLAYER_WITH_ID_S_NOT_FOUND = "team with id %d or player with id %s not found";
     public static final String TEAM_ALREADY_EXISTS = "team already exists";
+    public static final String TEAM_CONTAINS_PLAYERS = "team contains players";
     private final TeamRepository teamRepository;
     private final PlayerRepository playerRepository;
 
@@ -81,7 +82,12 @@ public class TeamService {
         if (!exists) {
             throw new NotFoundException(String.format(TEAM_WITH_ID_D_NOT_FOUND, teamID));
         }
-        teamRepository.deleteById(teamID);
+        Team team = teamRepository.getById(teamID);
+        if (team.getTeamPlayers().size() >= 1) {
+            throw new BadRequestException(TEAM_CONTAINS_PLAYERS);
+        } else {
+            teamRepository.deleteById(teamID);
+        }
     }
 
     public void addTeamPlayers(Long teamID, List<Long> playerIDs) {
