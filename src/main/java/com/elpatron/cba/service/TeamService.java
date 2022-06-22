@@ -16,8 +16,6 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static com.elpatron.cba.utilities.Checkers.checkIsPresent;
-
 @Service
 public class TeamService {
     public static final String TEAM_WITH_ID_D_NOT_FOUND = "team with id %d not found";
@@ -94,7 +92,7 @@ public class TeamService {
         Optional<Team> teamOptional = teamRepository.findById(teamID);
         for (Long playerID : playerIDs) {
             Optional<Player> playerOptional = playerRepository.findById(playerID);
-            if (checkIsPresent(teamOptional, playerOptional)) {
+            if (teamOptional.isPresent() && playerOptional.isPresent()) {
                 Team team = teamOptional.get();
                 Player player = playerOptional.get();
                 team.addTeamPlayer(player);
@@ -109,7 +107,7 @@ public class TeamService {
     public void removeTeamPlayer(Long teamID, Long playerID) {
         Optional<Team> teamOptional = teamRepository.findById(teamID);
         Optional<Player> playerOptional = playerRepository.findById(playerID);
-        if (checkIsPresent(teamOptional, playerOptional)) {
+        if (teamOptional.isPresent() && playerOptional.isPresent()) {
             Team team = teamOptional.get();
             Player player = playerOptional.get();
             team.removeTeamPlayer(player);
