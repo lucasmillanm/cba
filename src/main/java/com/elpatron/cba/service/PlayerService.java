@@ -34,7 +34,7 @@ public class PlayerService {
 
     public Player getPlayerDetails(Long playerID) {
         Optional<Player> playerOptional = playerRepository.findById(playerID);
-        if (!playerOptional.isPresent()) {
+        if (playerOptional.isEmpty()) {
             throw new NotFoundException(String.format(PLAYER_WITH_ID_D_NOT_FOUND, playerID));
         }
         return playerOptional.get();

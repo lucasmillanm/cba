@@ -40,7 +40,7 @@ public class TeamService {
 
     public Team getTeamDetails(Long teamID) {
         Optional<Team> teamOptional = teamRepository.findById(teamID);
-        if (!teamOptional.isPresent()) {
+        if (teamOptional.isEmpty()) {
             throw new NotFoundException(String.format(TEAM_WITH_ID_D_NOT_FOUND, teamID));
         }
         return teamOptional.get();
