@@ -52,8 +52,9 @@ public class PlayerService {
                 ));
         existingPlayer.setFirstName(player.getFirstName());
         existingPlayer.setLastName(player.getLastName());
-        existingPlayer.setPos(player.getPos());
+        existingPlayer.setPosition(player.getPosition());
         existingPlayer.setNumber(player.getNumber());
+        existingPlayer.setDescription(player.getDescription());
     }
 
     public void deletePlayer(Long playerID) {
