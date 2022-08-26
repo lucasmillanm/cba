@@ -23,21 +23,21 @@ public class TeamController {
         return teamService.getAllTeams();
     }
 
-    @GetMapping("{teamID}")
+    @GetMapping("/{teamID}")
     public Team showTeamDetails(
             @PathVariable("teamID") Long teamID
     ) {
         return teamService.getTeamDetails(teamID);
     }
 
-    @PostMapping("add")
+    @PostMapping("/add")
     public void registerNewTeam(
             @RequestBody Team team
     ) {
         teamService.addNewTeam(team);
     }
 
-    @PutMapping("update/{teamID}")
+    @PutMapping("/update/{teamID}")
     public void updateTeam(
             @PathVariable("teamID") Long teamID,
             @RequestBody Team team
@@ -45,14 +45,14 @@ public class TeamController {
         teamService.updateTeam(team, teamID);
     }
 
-    @DeleteMapping("delete/{teamID}")
+    @DeleteMapping("/delete/{teamID}")
     public void deleteTeam(
             @PathVariable("teamID") Long teamID
     ) {
         teamService.deleteTeam(teamID);
     }
 
-    @PostMapping("{teamID}/add")
+    @PostMapping("/{teamID}/add")
     public void addTeamPlayers(
             @PathVariable("teamID") Long teamID,
             @RequestBody List<Long> playerIDs
@@ -60,7 +60,7 @@ public class TeamController {
         teamService.addTeamPlayers(teamID, playerIDs);
     }
 
-    @DeleteMapping("{teamID}/remove/{playerID}")
+    @DeleteMapping("/{teamID}/remove/{playerID}")
     public void removeTeamPlayer(
             @PathVariable("teamID") Long teamID,
             @PathVariable("playerID") Long playerID

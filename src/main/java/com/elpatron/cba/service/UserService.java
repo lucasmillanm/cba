@@ -1,7 +1,7 @@
 package com.elpatron.cba.service;
 
-import com.elpatron.cba.domain.Role;
-import com.elpatron.cba.domain.User;
+import com.elpatron.cba.model.Role;
+import com.elpatron.cba.model.User;
 import com.elpatron.cba.repository.RoleRepository;
 import com.elpatron.cba.repository.UserRepository;
 import lombok.RequiredArgsConstructor;

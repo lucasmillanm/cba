@@ -22,26 +22,26 @@ public class PlayerController {
         return playerService.getAllPlayers();
     }
 
-    @GetMapping("validPlayers")
+    @GetMapping("/validPlayers")
     public List<Player> getValidPlayers() {
         return playerService.getValidPlayers();
     }
 
-    @GetMapping("{playerID}")
+    @GetMapping("/{playerID}")
     public Player showPlayerDetails(
             @PathVariable("playerID") Long playerID
     ) {
         return playerService.getPlayerDetails(playerID);
     }
 
-    @PostMapping("add")
+    @PostMapping("/add")
     public void registerNewPlayer(
             @RequestBody Player player
     ) {
         playerService.addNewPlayer(player);
     }
 
-    @PutMapping("update/{playerID}")
+    @PutMapping("/update/{playerID}")
     public void updatePlayer(
             @PathVariable("playerID") Long playerID,
             @RequestBody Player player
@@ -49,7 +49,7 @@ public class PlayerController {
         playerService.updatePlayer(playerID, player);
     }
 
-    @DeleteMapping("delete/{playerID}")
+    @DeleteMapping("/delete/{playerID}")
     public void deletePlayer(
             @PathVariable("playerID") Long playerID
     ) {

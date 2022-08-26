@@ -1,7 +1,7 @@
 package com.elpatron.cba;
 
-import com.elpatron.cba.domain.Role;
-import com.elpatron.cba.domain.User;
+import com.elpatron.cba.model.Role;
+import com.elpatron.cba.model.User;
 import com.elpatron.cba.service.UserService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -24,7 +24,7 @@ public class CbaApplication {
         return new BCryptPasswordEncoder();
     }
 
-    @Bean
+    /*@Bean
     CommandLineRunner run(UserService userService) {
         return args -> {
             userService.saveUser(new User(null, "test", "test", "test", new ArrayList<>()));
@@ -38,5 +38,5 @@ public class CbaApplication {
             userService.addRoleToUser("test" , "USER");
             userService.addRoleToUser("test2" , "USER");
         };
-    }
+    }*/
 }

@@ -1,4 +1,4 @@
-package com.elpatron.cba.domain;
+package com.elpatron.cba.model;
 
 import lombok.*;
 
@@ -12,7 +12,6 @@ import java.util.Collection;
 @NoArgsConstructor
 @AllArgsConstructor
 public class User {
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
