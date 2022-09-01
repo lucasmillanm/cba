@@ -32,7 +32,7 @@ public class TeamController {
     }
 
     @PostMapping("/add")
-    public void registerNewTeam(
+    public void addNewTeam(
             @Valid
             @RequestBody Team team
     ) {
