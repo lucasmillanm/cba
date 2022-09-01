@@ -36,7 +36,7 @@ public class PlayerController {
     }
 
     @PostMapping("/add")
-    public void registerNewPlayer(
+    public void addNewPlayer(
             @Valid
             @RequestBody Player player
     ) {

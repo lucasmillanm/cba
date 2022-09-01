@@ -58,8 +58,7 @@ public class PlayerService {
     }
 
     public void deletePlayer(Long playerID) {
-        boolean exists = playerRepository.existsById(playerID);
-        if (!exists) {
+        if (!playerRepository.existsById(playerID)) {
             throw new NotFoundException(String.format(PLAYER_WITH_ID_D_NOT_FOUND, playerID));
         }
         playerRepository.deleteById(playerID);
