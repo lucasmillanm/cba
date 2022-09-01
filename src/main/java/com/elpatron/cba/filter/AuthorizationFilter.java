@@ -25,11 +25,9 @@ import static java.util.Arrays.stream;
 @Slf4j
 public class AuthorizationFilter extends OncePerRequestFilter {
 
-    Utility utility = new Utility();
-
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        if (request.getServletPath().equals("/api/login") || request.getServletPath().equals("/api/token/refresh")) {
+        if (request.getServletPath().equals("/cba/login") || request.getServletPath().equals("/cba/token/refresh")) {
             filterChain.doFilter(request, response);
         } else {
             String authorizationHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
@@ -50,6 +48,7 @@ public class AuthorizationFilter extends OncePerRequestFilter {
                     SecurityContextHolder.getContext().setAuthentication(authenticationToken);
                     filterChain.doFilter(request, response);
                 } catch (Exception exception) {
+                    Utility utility = new Utility();
                     utility.getException(response, exception);
                 }
             } else {
