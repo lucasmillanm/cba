@@ -4,13 +4,12 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.elpatron.cba.dto.UserRoleDTO;
 import com.elpatron.cba.model.Role;
 import com.elpatron.cba.model.User;
 import com.elpatron.cba.service.UserService;
 import com.elpatron.cba.utility.Utility;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +18,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.io.IOException;
 import java.net.URI;
 import java.util.Date;
@@ -28,39 +28,43 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api")
-@RequiredArgsConstructor
+@RequestMapping("/cba/users")
 public class UserController {
     private final UserService userService;
-    Utility utility = new Utility();
 
-    @GetMapping("/users")
+    @Autowired
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
+
+    @GetMapping("/all")
     public ResponseEntity<List<User>> getAllUsers() {
         return ResponseEntity.ok().body(userService.getAllUsers());
     }
 
-    @PostMapping("/user/save")
-    public ResponseEntity<User> saveUser(
+    @PostMapping("/add")
+    public ResponseEntity<User> addNewUser(
+            @Valid
             @RequestBody User user
     ) {
-        URI uri = URI.create(String.valueOf(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/user/save")));
-        return ResponseEntity.created(uri).body(userService.saveUser(user));
+        URI uri = URI.create(String.valueOf(ServletUriComponentsBuilder.fromCurrentContextPath().path("/cba/users/add")));
+        return ResponseEntity.created(uri).body(userService.addNewUser(user));
     }
 
-    @PostMapping("/role/save")
-    public ResponseEntity<Role> saveRole(
-            @RequestBody Role role
+    @PutMapping("/update/{userID}")
+    public void updateUser(
+            @Valid
+            @PathVariable("userID") Long userID,
+            @RequestBody User user
     ) {
-        URI uri = URI.create(String.valueOf(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/role/save")));
-        return ResponseEntity.created(uri).body(userService.saveRole(role));
+        userService.updateUser(user, userID);
     }
 
-    @PostMapping("/role/addToUser")
-    public ResponseEntity<Void> addRoleToUser(
-            @RequestBody UserRoleDTO userRoleDTO
-    ) {
-        userService.addRoleToUser(userRoleDTO.getUsername(), userRoleDTO.getRoleName());
-        return ResponseEntity.ok().build();
+    @DeleteMapping("/delete/{userID}")
+    public void deleteUser(
+            @PathVariable("userID") Long userID
+    ){
+        userService.deleteUser(userID);
     }
 
     @GetMapping("/token/refresh")
@@ -89,6 +93,7 @@ public class UserController {
                 response.setContentType(MediaType.APPLICATION_JSON_VALUE);
                 new ObjectMapper().writeValue(response.getOutputStream(), tokens);
             } catch (Exception exception) {
+                Utility utility = new Utility();
                 utility.getException(response, exception);
             }
         } else {
