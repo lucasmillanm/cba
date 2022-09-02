@@ -4,6 +4,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.elpatron.cba.dto.UserRoleDTO;
 import com.elpatron.cba.model.Role;
 import com.elpatron.cba.model.User;
 import com.elpatron.cba.service.UserService;
@@ -28,7 +29,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/cba/users")
+@RequestMapping("/cba")
 public class UserController {
     private final UserService userService;
 
@@ -37,12 +38,12 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping("/all")
+    @GetMapping("/users/all")
     public ResponseEntity<List<User>> getAllUsers() {
         return ResponseEntity.ok().body(userService.getAllUsers());
     }
 
-    @PostMapping("/add")
+    @PostMapping("/users/add")
     public ResponseEntity<User> addNewUser(
             @Valid
             @RequestBody User user
@@ -51,7 +52,7 @@ public class UserController {
         return ResponseEntity.created(uri).body(userService.addNewUser(user));
     }
 
-    @PutMapping("/update/{userID}")
+    @PutMapping("/users/update/{userID}")
     public void updateUser(
             @Valid
             @PathVariable("userID") Long userID,
@@ -60,11 +61,59 @@ public class UserController {
         userService.updateUser(user, userID);
     }
 
-    @DeleteMapping("/delete/{userID}")
+    @DeleteMapping("/users/delete/{userID}")
     public void deleteUser(
             @PathVariable("userID") Long userID
     ){
         userService.deleteUser(userID);
+    }
+
+    @GetMapping("/roles/all")
+    public ResponseEntity<List<Role>> getAllRoles() {
+        return ResponseEntity.ok().body(userService.getAllRoles());
+    }
+
+    @PostMapping("/roles/add")
+    public ResponseEntity<Role> addNewRole(
+            @Valid
+            @RequestBody Role role
+    ) {
+        URI uri = URI.create(String.valueOf(ServletUriComponentsBuilder.fromCurrentContextPath().path("/cba/roles/add")));
+        return ResponseEntity.created(uri).body(userService.addNewRole(role));
+    }
+
+    /*@PutMapping("/update/{roleID}")
+    public void updateRole(
+            @Valid
+            @PathVariable("roleID") Long roleID,
+            @RequestBody Role role
+    ) {
+        roleService.updateRole(role, roleID);
+    }*/
+
+    @DeleteMapping("/roles/delete/{roleID}")
+    public void deleteRole(
+            @PathVariable("roleID") Long roleID
+    ) {
+        userService.deleteRole(roleID);
+    }
+
+    @PostMapping("/roles/addUserRole")
+    public ResponseEntity<Void> addUserRole(
+            @Valid
+            @RequestBody UserRoleDTO userRoleDTO
+    ) {
+        userService.addUserRole(userRoleDTO.getUsername(), userRoleDTO.getRoleName());
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/roles/removeUserRole")
+    public ResponseEntity<Void> removeUserRole(
+            @Valid
+            @RequestBody UserRoleDTO userRoleDTO
+    ) {
+        userService.removeUserRole(userRoleDTO.getUsername(), userRoleDTO.getRoleName());
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/token/refresh")

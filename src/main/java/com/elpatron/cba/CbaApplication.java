@@ -24,19 +24,19 @@ public class CbaApplication {
         return new BCryptPasswordEncoder();
     }
 
-    /*@Bean
+    @Bean
     CommandLineRunner run(UserService userService) {
         return args -> {
-            userService.saveUser(new User(null, "test", "test", "test", new ArrayList<>()));
-            userService.saveUser(new User(null, "test2", "test2", "test2", new ArrayList<>()));
-            userService.saveUser(new User(null, "test3", "test3", "test3", new ArrayList<>()));
+            userService.addNewUser(new User(null, "test", "test", "test", new ArrayList<>()));
+            userService.addNewUser(new User(null, "test2", "test2", "test2", new ArrayList<>()));
+            userService.addNewUser(new User(null, "test3", "test3", "test3", new ArrayList<>()));
 
-            userService.saveRole(new Role(null, "USER"));
-            userService.saveRole(new Role(null, "ADMIN"));
+            userService.addNewRole(new Role(null, "USER"));
+            userService.addNewRole(new Role(null, "ADMIN"));
 
-            userService.addRoleToUser("test" , "ADMIN");
-            userService.addRoleToUser("test" , "USER");
-            userService.addRoleToUser("test2" , "USER");
+            userService.addUserRole("test" , "ADMIN");
+            userService.addUserRole("test" , "USER");
+            userService.addUserRole("test2" , "USER");
         };
-    }*/
+    }
 }
