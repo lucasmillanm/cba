@@ -1,2 +1,106 @@
-package com.elpatron.cba.service;public class RoleService {
+package com.elpatron.cba.service;
+
+import com.elpatron.cba.exception.BadRequestException;
+import com.elpatron.cba.exception.NotFoundException;
+import com.elpatron.cba.model.Role;
+import com.elpatron.cba.model.User;
+import com.elpatron.cba.repository.RoleRepository;
+import com.elpatron.cba.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+
+import javax.transaction.Transactional;
+import java.util.List;
+
+@Service
+@RequiredArgsConstructor
+@Transactional
+@Slf4j
+public class RoleService {
+
+    private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
+
+    public List<Role> getAllRoles() {
+        log.info("fetching all roles");
+        return roleRepository.findAll();
+    }
+
+    public Role addNewRole(Role role) {
+        if (roleRepository.existsByName(role.getName())) {
+            log.error("role already exists");
+            throw new BadRequestException("role already exists");
+        } else {
+            log.info("saving new role {} to db", role.getName());
+            role.setName(role.getName().toUpperCase());
+            return roleRepository.save(role);
+        }
+    }
+
+    /*@Transactional
+    public void updateRole(Role role, Long roleID) {
+        Role existingRole = roleRepository.findById(roleID)
+                .orElseThrow(() -> new NotFoundException("role not found")
+                );
+        if (roleRepository.existsByName(role.getName())) {
+            if (Objects.equals(existingRole.getName(), role.getName())) {
+                existingRole.setName(user.getName());
+                existingRole.setUsername(user.getUsername());
+                existingRole.setPassword(passwordEncoder.encode(user.getPassword()));
+                userRepository.save(existingRole);
+            } else {
+                log.error("username is taken");
+                throw new BadRequestException("username is taken");
+            }
+        } else {
+            existingRole.setName(user.getName());
+            existingRole.setUsername(user.getUsername());
+            existingRole.setPassword(passwordEncoder.encode(user.getPassword()));
+            userRepository.save(existingRole);
+        }
+    }*/
+
+    public void deleteRole(Long roleID) {
+        if (roleRepository.existsById(roleID)) {
+            roleRepository.deleteById(roleID);
+        } else {
+            log.error("role with id {} not found", roleID);
+            throw new NotFoundException("role not found");
+        }
+    }
+
+    public void addUserRole(String username, String roleName) {
+        User user = userRepository.findByUsername(username);
+        if (user == null) {
+            throw new NotFoundException("user not found");
+        } else {
+            for (Role roleDuplicate : user.getRoles()) {
+                if (roleDuplicate.getName().equals(roleName)) {
+                    log.error("user already has this role");
+                    throw new BadRequestException("user already has this role");
+                }
+            }
+        }
+        Role role = roleRepository.findByName(roleName);
+        log.info("adding role {} to user {} to db", roleName, username);
+        user.getRoles().add(role);
+        userRepository.save(user);
+    }
+
+    public void removeUserRole(String username, String roleName) {
+        User user = userRepository.findByUsername(username);
+        Role role = roleRepository.findByName(roleName);
+        if (user == null || role == null) {
+            throw new NotFoundException("user or role not found");
+        } else if (user.getRoles().isEmpty()) {
+            throw new NotFoundException("this user does not have any roles");
+        } else if (!user.getRoles().contains(roleName)) {
+            throw new NotFoundException("this user does not have ths role");
+        } else {
+            log.info("removing role {} from user {} from db", roleName, username);
+            user.getRoles().remove(role);
+            userRepository.save(user);
+        }
+    }
 }
