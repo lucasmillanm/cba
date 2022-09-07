@@ -45,7 +45,7 @@ public class TeamController {
             @PathVariable("teamID") Long teamID,
             @RequestBody Team team
     ) {
-        teamService.updateTeam(team, teamID);
+        teamService.updateTeam(teamID, team);
     }
 
     @DeleteMapping("/delete/{teamID}")

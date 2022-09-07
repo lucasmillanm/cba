@@ -58,7 +58,7 @@ public class TeamService {
     }
 
     @Transactional
-    public void updateTeam(Team team, Long teamID) {
+    public void updateTeam(Long teamID,Team team) {
         Team existingTeam = teamRepository.findById(teamID)
                 .orElseThrow(() -> new NotFoundException(
                         String.format(TEAM_WITH_ID_D_NOT_FOUND, teamID)
