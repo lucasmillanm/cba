@@ -58,22 +58,21 @@ public class TeamService {
     }
 
     @Transactional
-    public void updateTeam(Long teamID,Team team) {
+    public void updateTeam(Long teamID, Team team) {
         Team existingTeam = teamRepository.findById(teamID)
                 .orElseThrow(() -> new NotFoundException(
                         String.format(TEAM_WITH_ID_D_NOT_FOUND, teamID)
                 ));
-
+        existingTeam.setTeamCity(team.getTeamCity());
         if (!Objects.equals(existingTeam.getTeamName(), team.getTeamName())) {
             if (teamRepository.existsTeamByTeamName(team.getTeamName())) {
                 throw new BadRequestException(TEAM_ALREADY_EXISTS);
             } else {
-                existingTeam.setTeamCity(team.getTeamCity());
                 existingTeam.setTeamName(team.getTeamName());
-                existingTeam.setTeamCoach(team.getTeamCoach());
-                teamRepository.save(existingTeam);
             }
         }
+        existingTeam.setTeamCoach(team.getTeamCoach());
+        teamRepository.save(existingTeam);
     }
 
     public void deleteTeam(Long teamID) {
@@ -110,6 +109,13 @@ public class TeamService {
         if (teamOptional.isPresent() && playerOptional.isPresent()) {
             Team team = teamOptional.get();
             Player player = playerOptional.get();
+            List<Long> currentPlayerIDs = team.getTeamPlayers()
+                    .stream()
+                    .map(Player::getPlayerID)
+                    .collect(Collectors.toList());
+            if (!currentPlayerIDs.contains(playerID)) {
+                throw new NotFoundException("this team does not contain an expected player");
+            }
             team.removeTeamPlayer(player);
             player.setValid(true);
             teamRepository.save(team);
