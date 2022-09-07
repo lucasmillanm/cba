@@ -61,7 +61,7 @@ public class RoleController {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/removeUserRole")
+    @DeleteMapping("/removeUserRole")
     public ResponseEntity<Void> removedUserRole(
             @Valid
             @RequestBody UserRoleDTO userRoleDTO
