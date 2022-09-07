@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Locale;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -38,28 +40,23 @@ public class RoleService {
         }
     }
 
-    /*@Transactional
-    public void updateRole(Role role, Long roleID) {
+    @Transactional
+    public void updateRole(Long roleID, Role role) {
         Role existingRole = roleRepository.findById(roleID)
                 .orElseThrow(() -> new NotFoundException("role not found")
                 );
         if (roleRepository.existsByName(role.getName())) {
             if (Objects.equals(existingRole.getName(), role.getName())) {
-                existingRole.setName(user.getName());
-                existingRole.setUsername(user.getUsername());
-                existingRole.setPassword(passwordEncoder.encode(user.getPassword()));
-                userRepository.save(existingRole);
+                throw new BadRequestException("role name should not be the same as before");
             } else {
-                log.error("username is taken");
-                throw new BadRequestException("username is taken");
+                log.error("role name is taken");
+                throw new BadRequestException("role name is taken");
             }
         } else {
-            existingRole.setName(user.getName());
-            existingRole.setUsername(user.getUsername());
-            existingRole.setPassword(passwordEncoder.encode(user.getPassword()));
-            userRepository.save(existingRole);
+            existingRole.setName(role.getName().toUpperCase());
+            roleRepository.save(existingRole);
         }
-    }*/
+    }
 
     public void deleteRole(Long roleID) {
         if (roleRepository.existsById(roleID)) {

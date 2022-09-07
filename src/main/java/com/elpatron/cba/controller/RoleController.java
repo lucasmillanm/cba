@@ -36,14 +36,14 @@ public class RoleController {
         return ResponseEntity.created(uri).body(roleService.addNewRole(role));
     }
 
-    /*@PutMapping("/update/{roleID}")
+    @PutMapping("/update/{roleID}")
     public void updateRole(
             @Valid
             @PathVariable("roleID") Long roleID,
             @RequestBody Role role
     ) {
-        roleService.updateRole(role, roleID);
-    }*/
+        roleService.updateRole(roleID, role);
+    }
 
     @DeleteMapping("/delete/{roleID}")
     public void deleteRole(
