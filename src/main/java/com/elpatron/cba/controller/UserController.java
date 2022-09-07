@@ -57,7 +57,7 @@ public class UserController {
             @PathVariable("userID") Long userID,
             @RequestBody User user
     ) {
-        userService.updateUser(user, userID);
+        userService.updateUser(userID, user);
     }
 
     @DeleteMapping("/delete/{userID}")
@@ -67,6 +67,7 @@ public class UserController {
         userService.deleteUser(userID);
     }
 
+    //move this
     @GetMapping("/token/refresh")
     public void refreshToken(
             HttpServletRequest request,

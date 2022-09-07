@@ -68,7 +68,7 @@ public class UserService implements UserDetailsService {
     }
 
     @Transactional
-    public void updateUser(User user, Long userID) {
+    public void updateUser(Long userID, User user) {
         User existingUser = userRepository.findById(userID)
                 .orElseThrow(() -> new NotFoundException("user not found")
                 );
