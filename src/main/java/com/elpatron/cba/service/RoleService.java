@@ -14,6 +14,7 @@ import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -72,17 +73,23 @@ public class RoleService {
         if (user == null) {
             throw new NotFoundException("user not found");
         } else {
-            for (Role roleDuplicate : user.getRoles()) {
-                if (roleDuplicate.getName().equals(roleName)) {
-                    log.error("user already has this role");
+            /*if (this.getUserRoles(user).contains(roleName)) {
+                throw new BadRequestException("this user already has this role");
+            } else {
+
+            }*/
+            for (String role : getUserRoles(user)) {
+                if (role.equals(roleName)) {
                     throw new BadRequestException("user already has this role");
+                } else {
+                    log.info("user does not contain this role");
                 }
             }
+            Role role = roleRepository.findByName(roleName);
+            log.info("adding role {} to user {} to db", roleName, username);
+            user.getRoles().add(role);
+            userRepository.save(user);
         }
-        Role role = roleRepository.findByName(roleName);
-        log.info("adding role {} to user {} to db", roleName, username);
-        user.getRoles().add(role);
-        userRepository.save(user);
     }
 
     public void removeUserRole(String username, String roleName) {
@@ -92,12 +99,19 @@ public class RoleService {
             throw new NotFoundException("user or role not found");
         } else if (user.getRoles().isEmpty()) {
             throw new NotFoundException("this user does not have any roles");
-        } else if (!user.getRoles().contains(roleName)) {
-            throw new NotFoundException("this user does not have ths role");
+        } else if (!this.getUserRoles(user).contains(roleName.toUpperCase())) {
+            throw new NotFoundException("this user does not have this role");
         } else {
             log.info("removing role {} from user {} from db", roleName, username);
             user.getRoles().remove(role);
             userRepository.save(user);
         }
+    }
+
+    public List<String> getUserRoles(User user) {
+        return user.getRoles()
+                .stream()
+                .map(Role::getName)
+                .collect(Collectors.toList());
     }
 }
