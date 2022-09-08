@@ -67,7 +67,7 @@ public class UserController {
         userService.deleteUser(userID);
     }
 
-    @GetMapping("/token/refresh")
+    @GetMapping("/refresh-token")
     public void refreshToken(
             HttpServletRequest request,
             HttpServletResponse response
