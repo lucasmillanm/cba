@@ -20,10 +20,12 @@ public class PlayerService {
     private final PlayerRepository playerRepository;
 
     public List<Player> getAllPlayers() {
+        log.info("fetching all players");
         return playerRepository.findAll();
     }
 
     public List<Player> getValidPlayers() {
+        log.info("fetching all valid players");
         return playerRepository.findAll()
                 .stream()
                 .filter(Player::isValid)
@@ -31,15 +33,17 @@ public class PlayerService {
     }
 
     public Player getPlayerDetails(Long playerID) {
-        Optional<Player> playerOptional = playerRepository.findById(playerID);
-        if (playerOptional.isEmpty()) {
-            throw new NotFoundException(String.format(PLAYER_WITH_ID_D_NOT_FOUND, playerID));
-        }
-        return playerOptional.get();
+        Player existingPlayer = playerRepository.findById(playerID)
+                .orElseThrow(() -> new NotFoundException(
+                        String.format(PLAYER_WITH_ID_D_NOT_FOUND, playerID)
+                ));
+        log.info("fetching player");
+        return existingPlayer;
     }
 
-    public void addNewPlayer(Player player) {
-        playerRepository.save(player);
+    public Player addNewPlayer(Player player) {
+        log.info("adding new player {} {}", player.getFirstName(), player.getLastName());
+        return playerRepository.save(player);
     }
 
     @Transactional
@@ -48,6 +52,7 @@ public class PlayerService {
                 .orElseThrow(() -> new NotFoundException(
                         String.format(PLAYER_WITH_ID_D_NOT_FOUND, playerID)
                 ));
+        log.info("updating player {} {}", player.getFirstName(), player.getLastName());
         existingPlayer.setFirstName(player.getFirstName());
         existingPlayer.setLastName(player.getLastName());
         existingPlayer.setPosition(player.getPosition());
@@ -57,8 +62,10 @@ public class PlayerService {
 
     public void deletePlayer(Long playerID) {
         if (!playerRepository.existsById(playerID)) {
+            log.warn("player with id {} not found", playerID);
             throw new NotFoundException(String.format(PLAYER_WITH_ID_D_NOT_FOUND, playerID));
         }
+        log.info("deleting player with id {}", playerID);
         playerRepository.deleteById(playerID);
     }
 }
