@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
-import java.util.Locale;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -73,22 +72,17 @@ public class RoleService {
         if (user == null) {
             throw new NotFoundException("user not found");
         } else {
-            /*if (this.getUserRoles(user).contains(roleName)) {
+            if (this.containsUserRoles(user, roleName)) {
                 throw new BadRequestException("this user already has this role");
             } else {
-
-            }*/
-            for (String role : getUserRoles(user)) {
-                if (role.equals(roleName)) {
-                    throw new BadRequestException("user already has this role");
-                } else {
-                    log.info("user does not contain this role");
+                Role role = roleRepository.findByName(roleName);
+                if (role == null) {
+                    throw new NotFoundException("role not found");
                 }
+                log.info("adding role {} to user {} to db", roleName, username);
+                user.getRoles().add(role);
+                userRepository.save(user);
             }
-            Role role = roleRepository.findByName(roleName);
-            log.info("adding role {} to user {} to db", roleName, username);
-            user.getRoles().add(role);
-            userRepository.save(user);
         }
     }
 
@@ -99,7 +93,7 @@ public class RoleService {
             throw new NotFoundException("user or role not found");
         } else if (user.getRoles().isEmpty()) {
             throw new NotFoundException("this user does not have any roles");
-        } else if (!this.getUserRoles(user).contains(roleName.toUpperCase())) {
+        } else if (!this.containsUserRoles(user, roleName)) {
             throw new NotFoundException("this user does not have this role");
         } else {
             log.info("removing role {} from user {} from db", roleName, username);
@@ -108,10 +102,11 @@ public class RoleService {
         }
     }
 
-    public List<String> getUserRoles(User user) {
-        return user.getRoles()
+    public boolean containsUserRoles(User user, String roleName) {
+        List<String> userRoles = user.getRoles()
                 .stream()
                 .map(Role::getName)
                 .collect(Collectors.toList());
+        return userRoles.contains(roleName.toUpperCase());
     }
 }
