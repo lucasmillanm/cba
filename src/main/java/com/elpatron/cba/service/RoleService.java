@@ -34,7 +34,7 @@ public class RoleService {
             throw new BadRequestException("role already exists");
         } else {
             role.setName(role.getName().toUpperCase());
-            log.info("saving new role {}", role.getName());
+            log.info("adding new role {}", role.getName());
             return roleRepository.save(role);
         }
     }
@@ -87,10 +87,13 @@ public class RoleService {
         User user = userRepository.findByUsername(username);
         Role role = roleRepository.findByName(roleName);
         if (user == null || role == null) {
+            log.warn("user or role not found");
             throw new NotFoundException("user or role not found");
         } else if (user.getRoles().isEmpty()) {
+            log.warn("this user does not have any roles");
             throw new NotFoundException("this user does not have any roles");
         } else if (!this.containsUserRoles(user, roleName)) {
+            log.warn("this user does not have this role");
             throw new NotFoundException("this user does not have this role");
         } else {
             log.info("removing role {} from user {}", roleName, username);

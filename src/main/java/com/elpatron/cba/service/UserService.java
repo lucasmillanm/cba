@@ -2,9 +2,7 @@ package com.elpatron.cba.service;
 
 import com.elpatron.cba.exception.BadRequestException;
 import com.elpatron.cba.exception.NotFoundException;
-import com.elpatron.cba.model.Role;
 import com.elpatron.cba.model.User;
-import com.elpatron.cba.repository.RoleRepository;
 import com.elpatron.cba.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -61,7 +59,7 @@ public class UserService implements UserDetailsService {
             log.warn("username is taken");
             throw new BadRequestException("username is taken");
         } else {
-            log.info("saving new user {} to db", user.getName());
+            log.info("adding new user {}", user.getName());
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             return userRepository.save(user);
         }
@@ -74,28 +72,32 @@ public class UserService implements UserDetailsService {
                 );
         if (userRepository.existsByUsername(user.getUsername())) {
             if (Objects.equals(existingUser.getUsername(), user.getUsername())) {
-                existingUser.setName(user.getName());
-                existingUser.setUsername(user.getUsername());
-                existingUser.setPassword(passwordEncoder.encode(user.getPassword()));
-                userRepository.save(existingUser);
+                log.info("updating user {}", user.getUsername());
+                this.saveUser(existingUser, user);
             } else {
                 log.warn("username is taken");
                 throw new BadRequestException("username is taken");
             }
         } else {
-            existingUser.setName(user.getName());
-            existingUser.setUsername(user.getUsername());
-            existingUser.setPassword(passwordEncoder.encode(user.getPassword()));
-            userRepository.save(existingUser);
+            log.info("updating user {}", user.getUsername());
+            this.saveUser(existingUser, user);
         }
     }
 
     public void deleteUser(Long userID) {
         if (userRepository.existsById(userID)) {
+            log.info("deleting user with id {}", userID);
             userRepository.deleteById(userID);
         } else {
             log.warn("user with id {} not found", userID);
             throw new NotFoundException("user not found");
         }
+    }
+
+    public void saveUser(User existingUser, User user) {
+        existingUser.setName(user.getName());
+        existingUser.setUsername(user.getUsername());
+        existingUser.setPassword(passwordEncoder.encode(user.getPassword()));
+        userRepository.save(user);
     }
 }
