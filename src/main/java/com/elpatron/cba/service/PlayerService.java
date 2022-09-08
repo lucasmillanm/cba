@@ -3,7 +3,8 @@ package com.elpatron.cba.service;
 import com.elpatron.cba.exception.NotFoundException;
 import com.elpatron.cba.model.Player;
 import com.elpatron.cba.repository.PlayerRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -12,14 +13,11 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
+@Slf4j
 public class PlayerService {
     public static final String PLAYER_WITH_ID_D_NOT_FOUND = "player with id %d not found";
     private final PlayerRepository playerRepository;
-
-    @Autowired
-    public PlayerService(PlayerRepository playerRepository) {
-        this.playerRepository = playerRepository;
-    }
 
     public List<Player> getAllPlayers() {
         return playerRepository.findAll();
