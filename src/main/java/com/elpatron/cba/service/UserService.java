@@ -34,7 +34,7 @@ public class UserService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User existingUser = userRepository.findByUsername(username);
         if (existingUser == null) {
-            log.error("user not found in db");
+            log.warn("user not found in db");
             throw new UsernameNotFoundException("user not found in db");
         } else {
             log.info("user {} found in db", username);
@@ -58,7 +58,7 @@ public class UserService implements UserDetailsService {
 
     public User addNewUser(User user) {
         if (userRepository.existsByUsername(user.getUsername())) {
-            log.error("username is taken");
+            log.warn("username is taken");
             throw new BadRequestException("username is taken");
         } else {
             log.info("saving new user {} to db", user.getName());
@@ -79,7 +79,7 @@ public class UserService implements UserDetailsService {
                 existingUser.setPassword(passwordEncoder.encode(user.getPassword()));
                 userRepository.save(existingUser);
             } else {
-                log.error("username is taken");
+                log.warn("username is taken");
                 throw new BadRequestException("username is taken");
             }
         } else {
@@ -94,7 +94,7 @@ public class UserService implements UserDetailsService {
         if (userRepository.existsById(userID)) {
             userRepository.deleteById(userID);
         } else {
-            log.error("user with id {} not found", userID);
+            log.warn("user with id {} not found", userID);
             throw new NotFoundException("user not found");
         }
     }
