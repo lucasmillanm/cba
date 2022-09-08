@@ -33,8 +33,8 @@ public class RoleService {
             log.warn("role already exists");
             throw new BadRequestException("role already exists");
         } else {
-            log.info("saving new role {} to db", role.getName());
             role.setName(role.getName().toUpperCase());
+            log.info("saving new role {}", role.getName());
             return roleRepository.save(role);
         }
     }
@@ -48,6 +48,7 @@ public class RoleService {
             log.warn("role name is taken or same as before");
             throw new BadRequestException("role name is taken or same as before");
         } else {
+            log.info("updating role {} to {}", existingRole.getName(), role.getName().toUpperCase());
             existingRole.setName(role.getName().toUpperCase());
             roleRepository.save(existingRole);
         }
@@ -55,6 +56,7 @@ public class RoleService {
 
     public void deleteRole(Long roleID) {
         if (roleRepository.existsById(roleID)) {
+            log.info("deleting role with id {}", roleID);
             roleRepository.deleteById(roleID);
         } else {
             log.warn("role with id {} not found", roleID);
@@ -74,7 +76,7 @@ public class RoleService {
                 if (role == null) {
                     throw new NotFoundException("role not found");
                 }
-                log.info("adding role {} to user {} to db", roleName, username);
+                log.info("adding role {} to user {}", roleName, username);
                 user.getRoles().add(role);
                 userRepository.save(user);
             }
@@ -91,7 +93,7 @@ public class RoleService {
         } else if (!this.containsUserRoles(user, roleName)) {
             throw new NotFoundException("this user does not have this role");
         } else {
-            log.info("removing role {} from user {} from db", roleName, username);
+            log.info("removing role {} from user {}", roleName, username);
             user.getRoles().remove(role);
             userRepository.save(user);
         }
