@@ -9,7 +9,6 @@ import com.elpatron.cba.repository.PlayerRepository;
 import com.elpatron.cba.repository.TeamRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -30,6 +29,7 @@ public class TeamService {
     private final PlayerRepository playerRepository;
 
     public List<TeamDTO> getAllTeams() {
+        log.info("fetching all teams");
         return teamRepository.findAll()
                 .stream()
                 .map(this::teamDTO)
@@ -37,11 +37,11 @@ public class TeamService {
     }
 
     public Team getTeamDetails(Long teamID) {
-        Optional<Team> teamOptional = teamRepository.findById(teamID);
-        if (teamOptional.isEmpty()) {
-            throw new NotFoundException(String.format(TEAM_WITH_ID_D_NOT_FOUND, teamID));
-        }
-        return teamOptional.get();
+        Team existingTeam = teamRepository.findById(teamID)
+                .orElseThrow(() -> new NotFoundException(String.format(TEAM_WITH_ID_D_NOT_FOUND, teamID)
+                ));
+        log.info("fetching team");
+        return existingTeam;
     }
 
     private TeamDTO teamDTO(Team team) {
@@ -50,8 +50,10 @@ public class TeamService {
 
     public void addNewTeam(Team team) {
         if (teamRepository.existsTeamByTeamName(team.getTeamName())) {
+            log.warn("team already exists");
             throw new BadRequestException(TEAM_ALREADY_EXISTS);
         }
+        log.info("adding new team {}", team.getTeamName());
         teamRepository.save(team);
     }
 
@@ -64,23 +66,28 @@ public class TeamService {
         existingTeam.setTeamCity(team.getTeamCity());
         if (!Objects.equals(existingTeam.getTeamName(), team.getTeamName())) {
             if (teamRepository.existsTeamByTeamName(team.getTeamName())) {
+                log.warn("team already exists");
                 throw new BadRequestException(TEAM_ALREADY_EXISTS);
             } else {
                 existingTeam.setTeamName(team.getTeamName());
             }
         }
         existingTeam.setTeamCoach(team.getTeamCoach());
+        log.info("updating team {} {}", existingTeam.getTeamCity(), existingTeam.getTeamName());
         teamRepository.save(existingTeam);
     }
 
     public void deleteTeam(Long teamID) {
         if (!teamRepository.existsById(teamID)) {
+            log.warn("team not found");
             throw new NotFoundException(String.format(TEAM_WITH_ID_D_NOT_FOUND, teamID));
         }
         Team team = teamRepository.getById(teamID);
         if (team.getTeamPlayers().size() >= 1) {
+            log.warn("team contains players");
             throw new BadRequestException(TEAM_CONTAINS_PLAYERS);
         } else {
+            log.info("deleting team with id {}", teamID);
             teamRepository.deleteById(teamID);
         }
     }
@@ -94,8 +101,10 @@ public class TeamService {
                 Player player = playerOptional.get();
                 team.addTeamPlayer(player);
                 player.setValid(false);
+                log.info("adding player to team");
                 teamRepository.save(team);
             } else {
+                log.warn("team or player not found");
                 throw new NotFoundException(String.format(TEAM_WITH_ID_D_OR_PLAYER_WITH_ID_S_NOT_FOUND, teamID, playerID));
             }
         }
@@ -112,12 +121,15 @@ public class TeamService {
                     .map(Player::getPlayerID)
                     .collect(Collectors.toList());
             if (!currentPlayerIDs.contains(playerID)) {
+                log.warn("team does not contain the expected player");
                 throw new NotFoundException("this team does not contain the expected player");
             }
             team.removeTeamPlayer(player);
             player.setValid(true);
+            log.info("removing player from team");
             teamRepository.save(team);
         } else {
+            log.warn("team or player not found");
             throw new NotFoundException(String.format(TEAM_WITH_ID_D_OR_PLAYER_WITH_ID_S_NOT_FOUND, teamID, playerID));
         }
     }
