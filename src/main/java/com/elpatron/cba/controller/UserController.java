@@ -67,7 +67,6 @@ public class UserController {
         userService.deleteUser(userID);
     }
 
-    //move this
     @GetMapping("/token/refresh")
     public void refreshToken(
             HttpServletRequest request,
@@ -98,7 +97,7 @@ public class UserController {
                 utility.getException(response, exception);
             }
         } else {
-            throw new RuntimeException("Refresh token is missing");
+            throw new RuntimeException("refresh token is missing");
         }
     }
 }
