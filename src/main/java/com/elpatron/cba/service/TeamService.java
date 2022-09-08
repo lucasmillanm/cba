@@ -114,7 +114,7 @@ public class TeamService {
                     .map(Player::getPlayerID)
                     .collect(Collectors.toList());
             if (!currentPlayerIDs.contains(playerID)) {
-                throw new NotFoundException("this team does not contain an expected player");
+                throw new NotFoundException("this team does not contain the expected player");
             }
             team.removeTeamPlayer(player);
             player.setValid(true);
