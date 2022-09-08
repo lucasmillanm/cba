@@ -7,6 +7,8 @@ import com.elpatron.cba.model.Player;
 import com.elpatron.cba.model.Team;
 import com.elpatron.cba.repository.PlayerRepository;
 import com.elpatron.cba.repository.TeamRepository;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +19,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
+@Slf4j
 public class TeamService {
     public static final String TEAM_WITH_ID_D_NOT_FOUND = "team with id %d not found";
     public static final String TEAM_WITH_ID_D_OR_PLAYER_WITH_ID_S_NOT_FOUND = "team with id %d or player with id %s not found";
@@ -24,12 +28,6 @@ public class TeamService {
     public static final String TEAM_CONTAINS_PLAYERS = "team contains players";
     private final TeamRepository teamRepository;
     private final PlayerRepository playerRepository;
-
-    @Autowired
-    public TeamService(TeamRepository teamRepository, PlayerRepository playerRepository) {
-        this.teamRepository = teamRepository;
-        this.playerRepository = playerRepository;
-    }
 
     public List<TeamDTO> getAllTeams() {
         return teamRepository.findAll()
