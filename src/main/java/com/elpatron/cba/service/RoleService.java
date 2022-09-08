@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -31,7 +30,7 @@ public class RoleService {
 
     public Role addNewRole(Role role) {
         if (roleRepository.existsByName(role.getName())) {
-            log.error("role already exists");
+            log.warn("role already exists");
             throw new BadRequestException("role already exists");
         } else {
             log.info("saving new role {} to db", role.getName());
@@ -46,12 +45,8 @@ public class RoleService {
                 .orElseThrow(() -> new NotFoundException("role not found")
                 );
         if (roleRepository.existsByName(role.getName())) {
-            if (Objects.equals(existingRole.getName(), role.getName())) {
-                throw new BadRequestException("role name should not be the same as before");
-            } else {
-                log.error("role name is taken");
-                throw new BadRequestException("role name is taken");
-            }
+            log.warn("role name is taken or same as before");
+            throw new BadRequestException("role name is taken or same as before");
         } else {
             existingRole.setName(role.getName().toUpperCase());
             roleRepository.save(existingRole);
@@ -62,7 +57,7 @@ public class RoleService {
         if (roleRepository.existsById(roleID)) {
             roleRepository.deleteById(roleID);
         } else {
-            log.error("role with id {} not found", roleID);
+            log.warn("role with id {} not found", roleID);
             throw new NotFoundException("role not found");
         }
     }
