@@ -52,21 +52,19 @@ public class RoleController {
         roleService.deleteRole(roleID);
     }
 
-    @PostMapping("/addUserRole")
-    public ResponseEntity<Void> addUserRole(
+    @PostMapping("/add-user-role")
+    public void addUserRole(
             @Valid
             @RequestBody UserRoleDTO userRoleDTO
     ) {
         roleService.addUserRole(userRoleDTO.getUsername(), userRoleDTO.getRoleName());
-        return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("/removeUserRole")
-    public ResponseEntity<Void> removedUserRole(
+    @DeleteMapping("/remove-user-role")
+    public void removedUserRole(
             @Valid
             @RequestBody UserRoleDTO userRoleDTO
     ) {
         roleService.removeUserRole(userRoleDTO.getUsername(), userRoleDTO.getRoleName());
-        return ResponseEntity.ok().build();
     }
 }

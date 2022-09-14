@@ -48,13 +48,13 @@ public class TeamService {
         return new TeamDTO(team.getTeamID(), team.getTeamCity(), team.getTeamName());
     }
 
-    public void addNewTeam(Team team) {
+    public Team addNewTeam(Team team) {
         if (teamRepository.existsTeamByTeamName(team.getTeamName())) {
             log.warn("team already exists");
             throw new BadRequestException(TEAM_ALREADY_EXISTS);
         }
         log.info("adding new team {}", team.getTeamName());
-        teamRepository.save(team);
+        return teamRepository.save(team);
     }
 
     @Transactional

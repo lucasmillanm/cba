@@ -4,9 +4,12 @@ import com.elpatron.cba.dto.TeamDTO;
 import com.elpatron.cba.model.Team;
 import com.elpatron.cba.service.TeamService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -20,23 +23,24 @@ public class TeamController {
     }
 
     @GetMapping
-    public List<TeamDTO> getAllTeams() {
-        return teamService.getAllTeams();
+    public ResponseEntity<List<TeamDTO>> getAllTeams() {
+        return ResponseEntity.ok().body(teamService.getAllTeams());
     }
 
     @GetMapping("/{teamID}")
-    public Team showTeamDetails(
+    public ResponseEntity<Team> showTeamDetails(
             @PathVariable("teamID") Long teamID
     ) {
-        return teamService.getTeamDetails(teamID);
+        return ResponseEntity.ok().body(teamService.getTeamDetails(teamID));
     }
 
     @PostMapping("/add")
-    public void addNewTeam(
+    public ResponseEntity<Team> addNewTeam(
             @Valid
             @RequestBody Team team
     ) {
-        teamService.addNewTeam(team);
+        URI uri = URI.create(String.valueOf(ServletUriComponentsBuilder.fromCurrentContextPath().path("/cba/teams/add")));
+        return ResponseEntity.created(uri).body(teamService.addNewTeam(team));
     }
 
     @PutMapping("/update/{teamID}")

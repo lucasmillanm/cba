@@ -3,9 +3,12 @@ package com.elpatron.cba.controller;
 import com.elpatron.cba.model.Player;
 import com.elpatron.cba.service.PlayerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -19,28 +22,29 @@ public class PlayerController {
     }
 
     @GetMapping
-    public List<Player> getAllPlayers() {
-        return playerService.getAllPlayers();
+    public ResponseEntity<List<Player>> getAllPlayers() {
+        return ResponseEntity.ok().body(playerService.getAllPlayers());
     }
 
-    @GetMapping("/validPlayers")
-    public List<Player> getValidPlayers() {
-        return playerService.getValidPlayers();
+    @GetMapping("/valid-players")
+    public ResponseEntity<List<Player>> getValidPlayers() {
+        return ResponseEntity.ok().body(playerService.getValidPlayers());
     }
 
     @GetMapping("/{playerID}")
-    public Player showPlayerDetails(
+    public ResponseEntity<Player> showPlayerDetails(
             @PathVariable("playerID") Long playerID
     ) {
-        return playerService.getPlayerDetails(playerID);
+        return ResponseEntity.ok().body(playerService.getPlayerDetails(playerID));
     }
 
     @PostMapping("/add")
-    public void addNewPlayer(
+    public ResponseEntity<Player> addNewPlayer(
             @Valid
             @RequestBody Player player
     ) {
-        playerService.addNewPlayer(player);
+        URI uri = URI.create(String.valueOf(ServletUriComponentsBuilder.fromCurrentContextPath().path("/cba/players/add")));
+        return ResponseEntity.created(uri).body(playerService.addNewPlayer(player));
     }
 
     @PutMapping("/update/{playerID}")
