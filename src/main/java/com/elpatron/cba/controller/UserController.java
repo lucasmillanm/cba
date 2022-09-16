@@ -37,12 +37,12 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping("/all")
+    @GetMapping
     public ResponseEntity<List<User>> getAllUsers() {
         return ResponseEntity.ok().body(userService.getAllUsers());
     }
 
-    @PostMapping("/add")
+    @PostMapping
     public ResponseEntity<User> addNewUser(
             @Valid
             @RequestBody User user
@@ -51,7 +51,7 @@ public class UserController {
         return ResponseEntity.created(uri).body(userService.addNewUser(user));
     }
 
-    @PutMapping("/update/{userID}")
+    @PutMapping("/{userID}")
     public void updateUser(
             @Valid
             @PathVariable("userID") Long userID,
@@ -60,7 +60,7 @@ public class UserController {
         userService.updateUser(userID, user);
     }
 
-    @DeleteMapping("/delete/{userID}")
+    @DeleteMapping("/{userID}")
     public void deleteUser(
             @PathVariable("userID") Long userID
     ) {

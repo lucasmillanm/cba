@@ -34,7 +34,7 @@ public class TeamController {
         return ResponseEntity.ok().body(teamService.getTeamDetails(teamID));
     }
 
-    @PostMapping("/add")
+    @PostMapping
     public ResponseEntity<Team> addNewTeam(
             @Valid
             @RequestBody Team team
@@ -43,7 +43,7 @@ public class TeamController {
         return ResponseEntity.created(uri).body(teamService.addNewTeam(team));
     }
 
-    @PutMapping("/update/{teamID}")
+    @PutMapping("/{teamID}")
     public void updateTeam(
             @Valid
             @PathVariable("teamID") Long teamID,
@@ -52,14 +52,14 @@ public class TeamController {
         teamService.updateTeam(teamID, team);
     }
 
-    @DeleteMapping("/delete/{teamID}")
+    @DeleteMapping("/{teamID}")
     public void deleteTeam(
             @PathVariable("teamID") Long teamID
     ) {
         teamService.deleteTeam(teamID);
     }
 
-    @PostMapping("/{teamID}/add")
+    @PostMapping("/{teamID}/add-player")
     public void addTeamPlayers(
             @Valid
             @PathVariable("teamID") Long teamID,

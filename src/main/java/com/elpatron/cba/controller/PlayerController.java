@@ -38,7 +38,7 @@ public class PlayerController {
         return ResponseEntity.ok().body(playerService.getPlayerDetails(playerID));
     }
 
-    @PostMapping("/add")
+    @PostMapping
     public ResponseEntity<Player> addNewPlayer(
             @Valid
             @RequestBody Player player
@@ -47,7 +47,7 @@ public class PlayerController {
         return ResponseEntity.created(uri).body(playerService.addNewPlayer(player));
     }
 
-    @PutMapping("/update/{playerID}")
+    @PutMapping("/{playerID}")
     public void updatePlayer(
             @Valid
             @PathVariable("playerID") Long playerID,
@@ -56,7 +56,7 @@ public class PlayerController {
         playerService.updatePlayer(playerID, player);
     }
 
-    @DeleteMapping("/delete/{playerID}")
+    @DeleteMapping("/{playerID}")
     public void deletePlayer(
             @PathVariable("playerID") Long playerID
     ) {

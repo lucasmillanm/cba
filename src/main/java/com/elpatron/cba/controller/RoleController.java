@@ -22,12 +22,12 @@ public class RoleController {
         this.roleService = roleService;
     }
 
-    @GetMapping("/all")
+    @GetMapping
     public ResponseEntity<List<Role>> getAllRoles() {
         return ResponseEntity.ok().body(roleService.getAllRoles());
     }
 
-    @PostMapping("/add")
+    @PostMapping
     public ResponseEntity<Role> addNewRole(
             @Valid
             @RequestBody Role role
@@ -36,7 +36,7 @@ public class RoleController {
         return ResponseEntity.created(uri).body(roleService.addNewRole(role));
     }
 
-    @PutMapping("/update/{roleID}")
+    @PutMapping("/{roleID}")
     public void updateRole(
             @Valid
             @PathVariable("roleID") Long roleID,
@@ -45,14 +45,14 @@ public class RoleController {
         roleService.updateRole(roleID, role);
     }
 
-    @DeleteMapping("/delete/{roleID}")
+    @DeleteMapping("/{roleID}")
     public void deleteRole(
             @PathVariable("roleID") Long roleID
     ) {
         roleService.deleteRole(roleID);
     }
 
-    @PostMapping("/add-user-role")
+    @PostMapping("/add-user")
     public void addUserRole(
             @Valid
             @RequestBody UserRoleDTO userRoleDTO
@@ -60,7 +60,7 @@ public class RoleController {
         roleService.addUserRole(userRoleDTO.getUsername(), userRoleDTO.getRoleName());
     }
 
-    @DeleteMapping("/remove-user-role")
+    @DeleteMapping("/remove-user")
     public void removedUserRole(
             @Valid
             @RequestBody UserRoleDTO userRoleDTO
