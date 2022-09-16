@@ -32,7 +32,7 @@ public class RoleController {
             @Valid
             @RequestBody Role role
     ) {
-        URI uri = URI.create(String.valueOf(ServletUriComponentsBuilder.fromCurrentContextPath().path("/cba/roles/add")));
+        URI uri = URI.create(String.valueOf(ServletUriComponentsBuilder.fromCurrentContextPath().path("/cba/roles")));
         return ResponseEntity.created(uri).body(roleService.addNewRole(role));
     }
 
