@@ -47,7 +47,7 @@ public class UserController {
             @Valid
             @RequestBody User user
     ) {
-        URI uri = URI.create(String.valueOf(ServletUriComponentsBuilder.fromCurrentContextPath().path("/cba/users/add")));
+        URI uri = URI.create(String.valueOf(ServletUriComponentsBuilder.fromCurrentContextPath().path("/cba/users")));
         return ResponseEntity.created(uri).body(userService.addNewUser(user));
     }
 
