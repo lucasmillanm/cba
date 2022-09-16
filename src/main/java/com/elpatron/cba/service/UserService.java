@@ -32,7 +32,7 @@ public class UserService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User existingUser = userRepository.findByUsername(username);
         if (existingUser == null) {
-            log.warn("user not found in db");
+            log.warn("user {} not found in db", username);
             throw new UsernameNotFoundException("user not found in db");
         } else {
             log.info("user {} found in db", username);
