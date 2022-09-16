@@ -56,6 +56,8 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
                 .withExpiresAt(new Date(System.currentTimeMillis() + 60L * 60L * 1000L * 24L * 30L))
                 .withIssuer(request.getRequestURL().toString())
                 .sign(algorithm);
+        response.setHeader("access_token", access_token);
+        response.setHeader("refresh_token", refresh_token);
         Map<String, String> tokens = new HashMap<>();
         tokens.put("access_token", access_token);
         tokens.put("refresh_token", refresh_token);
