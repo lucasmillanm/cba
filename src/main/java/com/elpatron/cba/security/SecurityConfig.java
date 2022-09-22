@@ -36,9 +36,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable();
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.authorizeRequests().antMatchers("/cba/login/**", "/cba/users/refresh-token").permitAll();
+        http.authorizeRequests().antMatchers(HttpMethod.POST, "/cba/users").permitAll();
         http.authorizeRequests().antMatchers(HttpMethod.GET, "/cba/**").authenticated();
         http.authorizeRequests().antMatchers(HttpMethod.POST, "/cba/**").hasAnyAuthority("ADMIN");
-        http.authorizeRequests().antMatchers(HttpMethod.POST, "/cba/users").permitAll();
         http.authorizeRequests().antMatchers(HttpMethod.PUT, "/cba/**").hasAnyAuthority("ADMIN");
         http.authorizeRequests().antMatchers(HttpMethod.DELETE, "/cba/**").hasAnyAuthority("ADMIN");
         http.authorizeRequests().anyRequest().authenticated();
