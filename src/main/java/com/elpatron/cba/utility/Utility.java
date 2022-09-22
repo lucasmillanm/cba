@@ -18,4 +18,18 @@ public class Utility {
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         new ObjectMapper().writeValue(response.getOutputStream(), error);
     }
+
+    public void setTokens(
+            String access_token,
+            String refresh_token,
+            HttpServletResponse response
+    ) throws IOException {
+        response.setHeader("access_token", access_token);
+        response.setHeader("refresh_token", refresh_token);
+        Map<String, String> tokens = new HashMap<>();
+        tokens.put("access_token", access_token);
+        tokens.put("refresh_token", refresh_token);
+        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+        new ObjectMapper().writeValue(response.getOutputStream(), tokens);
+    }
 }
