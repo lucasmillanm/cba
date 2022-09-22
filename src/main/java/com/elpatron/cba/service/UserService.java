@@ -59,7 +59,7 @@ public class UserService implements UserDetailsService {
             log.warn("username is taken");
             throw new BadRequestException("username is taken");
         } else {
-            log.info("adding new user {}", user.getName());
+            log.info("adding new user {}", user.getUsername());
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             return userRepository.save(user);
         }
