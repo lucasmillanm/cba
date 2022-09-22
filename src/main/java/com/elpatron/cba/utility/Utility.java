@@ -12,7 +12,7 @@ import java.util.Map;
 public class Utility {
     public void getException(HttpServletResponse response, Exception exception) throws IOException {
         response.setHeader("error", exception.getMessage());
-        response.setStatus(HttpStatus.FORBIDDEN.value());
+        response.setStatus(HttpStatus.UNAUTHORIZED.value());
         Map<String, String> error = new HashMap<>();
         error.put("error_message", exception.getMessage());
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
