@@ -35,11 +35,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         authenticationFilter.setFilterProcessesUrl("/cba/login");
         http.csrf().disable();
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-        http.authorizeRequests().antMatchers("/cba/login/**", "/cba/token/refresh").permitAll();
-        http.authorizeRequests().antMatchers(HttpMethod.GET, "/cba/players/**", "/cba/teams/**").authenticated();
-        http.authorizeRequests().antMatchers(HttpMethod.GET, "/cba/users/**").hasAnyAuthority("ADMIN", "USER");
-        http.authorizeRequests().antMatchers(HttpMethod.POST, "/cba/users").permitAll();
+        http.authorizeRequests().antMatchers("/cba/login/**", "/cba/users/refresh-token").permitAll();
+        http.authorizeRequests().antMatchers(HttpMethod.GET, "/cba/**").authenticated();
         http.authorizeRequests().antMatchers(HttpMethod.POST, "/cba/**").hasAnyAuthority("ADMIN");
+        http.authorizeRequests().antMatchers(HttpMethod.POST, "/cba/users").permitAll();
         http.authorizeRequests().antMatchers(HttpMethod.PUT, "/cba/**").hasAnyAuthority("ADMIN");
         http.authorizeRequests().antMatchers(HttpMethod.DELETE, "/cba/**").hasAnyAuthority("ADMIN");
         http.authorizeRequests().anyRequest().authenticated();
