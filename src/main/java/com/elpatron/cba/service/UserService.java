@@ -1,6 +1,6 @@
 package com.elpatron.cba.service;
 
-import com.elpatron.cba.exception.BadRequestException;
+import com.elpatron.cba.exception.MethodNotAllowedException;
 import com.elpatron.cba.exception.NotFoundException;
 import com.elpatron.cba.model.User;
 import com.elpatron.cba.repository.UserRepository;
@@ -57,7 +57,7 @@ public class UserService implements UserDetailsService {
     public User addNewUser(User user) {
         if (userRepository.existsByUsername(user.getUsername())) {
             log.warn("username is taken");
-            throw new BadRequestException("username is taken");
+            throw new MethodNotAllowedException("username is taken");
         } else {
             log.info("adding new user {}", user.getUsername());
             user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -76,7 +76,7 @@ public class UserService implements UserDetailsService {
                 this.saveUser(existingUser, user);
             } else {
                 log.warn("username is taken");
-                throw new BadRequestException("username is taken");
+                throw new MethodNotAllowedException("username is taken");
             }
         } else {
             log.info("updating user {}", user.getUsername());

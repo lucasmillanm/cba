@@ -1,7 +1,7 @@
 package com.elpatron.cba.service;
 
 import com.elpatron.cba.dto.TeamDTO;
-import com.elpatron.cba.exception.BadRequestException;
+import com.elpatron.cba.exception.MethodNotAllowedException;
 import com.elpatron.cba.exception.NotFoundException;
 import com.elpatron.cba.model.Player;
 import com.elpatron.cba.model.Team;
@@ -51,7 +51,7 @@ public class TeamService {
     public Team addNewTeam(Team team) {
         if (teamRepository.existsTeamByTeamName(team.getTeamName())) {
             log.warn("team already exists");
-            throw new BadRequestException(TEAM_ALREADY_EXISTS);
+            throw new MethodNotAllowedException(TEAM_ALREADY_EXISTS);
         }
         log.info("adding new team {}", team.getTeamName());
         return teamRepository.save(team);
@@ -67,7 +67,7 @@ public class TeamService {
         if (!Objects.equals(existingTeam.getTeamName(), team.getTeamName())) {
             if (teamRepository.existsTeamByTeamName(team.getTeamName())) {
                 log.warn("team already exists");
-                throw new BadRequestException(TEAM_ALREADY_EXISTS);
+                throw new MethodNotAllowedException(TEAM_ALREADY_EXISTS);
             } else {
                 existingTeam.setTeamName(team.getTeamName());
             }
@@ -85,7 +85,7 @@ public class TeamService {
         Team team = teamRepository.getById(teamID);
         if (team.getTeamPlayers().size() >= 1) {
             log.warn("team contains players");
-            throw new BadRequestException(TEAM_CONTAINS_PLAYERS);
+            throw new MethodNotAllowedException(TEAM_CONTAINS_PLAYERS);
         } else {
             log.info("deleting team with id {}", teamID);
             teamRepository.deleteById(teamID);

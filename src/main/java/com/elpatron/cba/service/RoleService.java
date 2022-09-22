@@ -1,6 +1,6 @@
 package com.elpatron.cba.service;
 
-import com.elpatron.cba.exception.BadRequestException;
+import com.elpatron.cba.exception.MethodNotAllowedException;
 import com.elpatron.cba.exception.NotFoundException;
 import com.elpatron.cba.model.Role;
 import com.elpatron.cba.model.User;
@@ -31,7 +31,7 @@ public class RoleService {
     public Role addNewRole(Role role) {
         if (roleRepository.existsByName(role.getName())) {
             log.warn("role already exists");
-            throw new BadRequestException("role already exists");
+            throw new MethodNotAllowedException("role already exists");
         } else {
             role.setName(role.getName().toUpperCase());
             log.info("adding new role {}", role.getName());
@@ -46,7 +46,7 @@ public class RoleService {
                 );
         if (roleRepository.existsByName(role.getName())) {
             log.warn("role name is taken or same as before");
-            throw new BadRequestException("role name is taken or same as before");
+            throw new MethodNotAllowedException("role name is taken or same as before");
         } else {
             log.info("updating role {} to {}", existingRole.getName(), role.getName().toUpperCase());
             existingRole.setName(role.getName().toUpperCase());
@@ -70,7 +70,7 @@ public class RoleService {
             throw new NotFoundException("user not found");
         } else {
             if (this.containsUserRoles(user, roleName)) {
-                throw new BadRequestException("this user already has this role");
+                throw new MethodNotAllowedException("this user already has this role");
             } else {
                 Role role = roleRepository.findByName(roleName);
                 if (role == null) {
