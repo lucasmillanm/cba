@@ -39,7 +39,7 @@ public class TeamController {
             @Valid
             @RequestBody Team team
     ) {
-        URI uri = URI.create(String.valueOf(ServletUriComponentsBuilder.fromCurrentContextPath().path("/cba/teams/add")));
+        URI uri = URI.create(String.valueOf(ServletUriComponentsBuilder.fromCurrentContextPath().path("/cba/teams")));
         return ResponseEntity.created(uri).body(teamService.addNewTeam(team));
     }
 

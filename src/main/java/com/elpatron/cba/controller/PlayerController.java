@@ -43,7 +43,7 @@ public class PlayerController {
             @Valid
             @RequestBody Player player
     ) {
-        URI uri = URI.create(String.valueOf(ServletUriComponentsBuilder.fromCurrentContextPath().path("/cba/players/add")));
+        URI uri = URI.create(String.valueOf(ServletUriComponentsBuilder.fromCurrentContextPath().path("/cba/players")));
         return ResponseEntity.created(uri).body(playerService.addNewPlayer(player));
     }
 
