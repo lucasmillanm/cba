@@ -3,9 +3,11 @@ package com.elpatron.cba.utility;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -31,5 +33,9 @@ public class Utility {
         tokens.put("refresh_token", refresh_token);
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         new ObjectMapper().writeValue(response.getOutputStream(), tokens);
+    }
+
+    public URI setURI(String path) {
+        return URI.create(String.valueOf(ServletUriComponentsBuilder.fromCurrentContextPath().path(path)));
     }
 }

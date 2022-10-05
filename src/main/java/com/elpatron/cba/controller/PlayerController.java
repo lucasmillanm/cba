@@ -2,13 +2,12 @@ package com.elpatron.cba.controller;
 
 import com.elpatron.cba.model.Player;
 import com.elpatron.cba.service.PlayerService;
+import com.elpatron.cba.utility.Utility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
-import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -43,8 +42,8 @@ public class PlayerController {
             @Valid
             @RequestBody Player player
     ) {
-        URI uri = URI.create(String.valueOf(ServletUriComponentsBuilder.fromCurrentContextPath().path("/cba/players")));
-        return ResponseEntity.created(uri).body(playerService.addNewPlayer(player));
+        Utility utility = new Utility();
+        return ResponseEntity.created(utility.setURI("/cba/players")).body(playerService.addNewPlayer(player));
     }
 
     @PutMapping("/{playerID}")

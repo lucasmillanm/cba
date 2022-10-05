@@ -12,13 +12,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
-import java.net.URI;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -43,8 +41,8 @@ public class UserController {
             @Valid
             @RequestBody User user
     ) {
-        URI uri = URI.create(String.valueOf(ServletUriComponentsBuilder.fromCurrentContextPath().path("/cba/users")));
-        return ResponseEntity.created(uri).body(userService.addNewUser(user));
+        Utility utility = new Utility();
+        return ResponseEntity.created(utility.setURI("/cba/users")).body(userService.addNewUser(user));
     }
 
     @PutMapping("/{userID}")

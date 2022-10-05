@@ -3,13 +3,12 @@ package com.elpatron.cba.controller;
 import com.elpatron.cba.dto.UserRoleDTO;
 import com.elpatron.cba.model.Role;
 import com.elpatron.cba.service.RoleService;
+import com.elpatron.cba.utility.Utility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
-import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -32,8 +31,8 @@ public class RoleController {
             @Valid
             @RequestBody Role role
     ) {
-        URI uri = URI.create(String.valueOf(ServletUriComponentsBuilder.fromCurrentContextPath().path("/cba/roles")));
-        return ResponseEntity.created(uri).body(roleService.addNewRole(role));
+        Utility utility = new Utility();
+        return ResponseEntity.created(utility.setURI("/cba/roles")).body(roleService.addNewRole(role));
     }
 
     @PutMapping("/{roleID}")
