@@ -22,7 +22,6 @@ import java.util.Collection;
 
 import static java.util.Arrays.stream;
 
-@Slf4j
 public class AuthorizationFilter extends OncePerRequestFilter {
 
     @Override
