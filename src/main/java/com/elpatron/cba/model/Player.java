@@ -5,10 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.*;
 
 @Getter
 @Setter
@@ -28,32 +25,33 @@ public class Player {
     )
     public Long playerID;
 
+    @Size(min = 2, max = 30)
     @NotBlank(message = "firstName cannot be empty")
-    @Column(name = "first_name")
     private String firstName;
 
+    @Size(min = 2, max = 30)
     @NotBlank(message = "lastName cannot be empty")
-    @Column(name = "last_name")
     private String lastName;
 
     @NotBlank(message = "position cannot be empty")
-    @Column(name = "pos")
-    private String pos;
+    private String position;
 
     @Min(0)
     @Max(99)
     @NotNull(message = "number cannot be empty")
-    @Column(name = "number")
     private int number;
 
-    @Column(name = "is_valid")
+    @Size(max = 255)
+    private String description;
+
     private boolean isValid = true;
 
-    public Player(String firstName, String lastName, String pos, int number, boolean isValid) {
+    public Player(String firstName, String lastName, String position, int number, String description, boolean isValid) {
         this.firstName = firstName;
         this.lastName = lastName;
-        this.pos = pos;
+        this.position = position;
         this.number = number;
+        this.description = description;
         this.isValid = isValid;
     }
 }

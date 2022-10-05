@@ -28,15 +28,12 @@ public class Team {
     private Long teamID;
 
     @NotBlank(message = "teamCity cannot be empty")
-    @Column(name = "team_city")
     private String teamCity;
 
     @NotBlank(message = "teamName cannot be empty")
-    @Column(name = "team_name")
     private String teamName;
 
     @NotBlank(message = "teamCoach cannot be empty")
-    @Column(name = "team_coach")
     private String teamCoach;
 
     @OneToMany

@@ -1,13 +1,14 @@
 package com.elpatron.cba.service;
 
 import com.elpatron.cba.dto.TeamDTO;
-import com.elpatron.cba.exception.BadRequestException;
+import com.elpatron.cba.exception.MethodNotAllowedException;
 import com.elpatron.cba.exception.NotFoundException;
 import com.elpatron.cba.model.Player;
 import com.elpatron.cba.model.Team;
 import com.elpatron.cba.repository.PlayerRepository;
 import com.elpatron.cba.repository.TeamRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -17,6 +18,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
+@Slf4j
 public class TeamService {
     public static final String TEAM_WITH_ID_D_NOT_FOUND = "team with id %d not found";
     public static final String TEAM_WITH_ID_D_OR_PLAYER_WITH_ID_S_NOT_FOUND = "team with id %d or player with id %s not found";
@@ -25,13 +28,8 @@ public class TeamService {
     private final TeamRepository teamRepository;
     private final PlayerRepository playerRepository;
 
-    @Autowired
-    public TeamService(TeamRepository teamRepository, PlayerRepository playerRepository) {
-        this.teamRepository = teamRepository;
-        this.playerRepository = playerRepository;
-    }
-
     public List<TeamDTO> getAllTeams() {
+        log.info("fetching all teams");
         return teamRepository.findAll()
                 .stream()
                 .map(this::teamDTO)
@@ -39,26 +37,28 @@ public class TeamService {
     }
 
     public Team getTeamDetails(Long teamID) {
-        Optional<Team> teamOptional = teamRepository.findById(teamID);
-        if (teamOptional.isEmpty()) {
-            throw new NotFoundException(String.format(TEAM_WITH_ID_D_NOT_FOUND, teamID));
-        }
-        return teamOptional.get();
+        Team existingTeam = teamRepository.findById(teamID)
+                .orElseThrow(() -> new NotFoundException(String.format(TEAM_WITH_ID_D_NOT_FOUND, teamID)
+                ));
+        log.info("fetching team");
+        return existingTeam;
     }
 
     private TeamDTO teamDTO(Team team) {
         return new TeamDTO(team.getTeamID(), team.getTeamCity(), team.getTeamName());
     }
 
-    public void addNewTeam(Team team) {
+    public Team addNewTeam(Team team) {
         if (teamRepository.existsTeamByTeamName(team.getTeamName())) {
-            throw new BadRequestException(TEAM_ALREADY_EXISTS);
+            log.warn("team already exists");
+            throw new MethodNotAllowedException(TEAM_ALREADY_EXISTS);
         }
-        teamRepository.save(team);
+        log.info("adding new team {}", team.getTeamName());
+        return teamRepository.save(team);
     }
 
     @Transactional
-    public void updateTeam(Team team, Long teamID) {
+    public void updateTeam(Long teamID, Team team) {
         Team existingTeam = teamRepository.findById(teamID)
                 .orElseThrow(() -> new NotFoundException(
                         String.format(TEAM_WITH_ID_D_NOT_FOUND, teamID)
@@ -66,24 +66,28 @@ public class TeamService {
         existingTeam.setTeamCity(team.getTeamCity());
         if (!Objects.equals(existingTeam.getTeamName(), team.getTeamName())) {
             if (teamRepository.existsTeamByTeamName(team.getTeamName())) {
-                throw new BadRequestException(TEAM_ALREADY_EXISTS);
+                log.warn("team already exists");
+                throw new MethodNotAllowedException(TEAM_ALREADY_EXISTS);
             } else {
                 existingTeam.setTeamName(team.getTeamName());
             }
         }
         existingTeam.setTeamCoach(team.getTeamCoach());
+        log.info("updating team {} {}", existingTeam.getTeamCity(), existingTeam.getTeamName());
         teamRepository.save(existingTeam);
     }
 
     public void deleteTeam(Long teamID) {
-        boolean exists = teamRepository.existsById(teamID);
-        if (!exists) {
+        if (!teamRepository.existsById(teamID)) {
+            log.warn("team not found");
             throw new NotFoundException(String.format(TEAM_WITH_ID_D_NOT_FOUND, teamID));
         }
         Team team = teamRepository.getById(teamID);
         if (team.getTeamPlayers().size() >= 1) {
-            throw new BadRequestException(TEAM_CONTAINS_PLAYERS);
+            log.warn("team contains players");
+            throw new MethodNotAllowedException(TEAM_CONTAINS_PLAYERS);
         } else {
+            log.info("deleting team with id {}", teamID);
             teamRepository.deleteById(teamID);
         }
     }
@@ -97,8 +101,10 @@ public class TeamService {
                 Player player = playerOptional.get();
                 team.addTeamPlayer(player);
                 player.setValid(false);
+                log.info("adding player to team");
                 teamRepository.save(team);
             } else {
+                log.warn("team or player not found");
                 throw new NotFoundException(String.format(TEAM_WITH_ID_D_OR_PLAYER_WITH_ID_S_NOT_FOUND, teamID, playerID));
             }
         }
@@ -110,10 +116,20 @@ public class TeamService {
         if (teamOptional.isPresent() && playerOptional.isPresent()) {
             Team team = teamOptional.get();
             Player player = playerOptional.get();
+            List<Long> currentPlayerIDs = team.getTeamPlayers()
+                    .stream()
+                    .map(Player::getPlayerID)
+                    .collect(Collectors.toList());
+            if (!currentPlayerIDs.contains(playerID)) {
+                log.warn("team does not contain the expected player");
+                throw new NotFoundException("this team does not contain the expected player");
+            }
             team.removeTeamPlayer(player);
             player.setValid(true);
+            log.info("removing player from team");
             teamRepository.save(team);
         } else {
+            log.warn("team or player not found");
             throw new NotFoundException(String.format(TEAM_WITH_ID_D_OR_PLAYER_WITH_ID_S_NOT_FOUND, teamID, playerID));
         }
     }

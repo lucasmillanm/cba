@@ -2,9 +2,12 @@ package com.elpatron.cba.controller;
 
 import com.elpatron.cba.model.Player;
 import com.elpatron.cba.service.PlayerService;
+import com.elpatron.cba.utility.Utility;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -18,38 +21,41 @@ public class PlayerController {
     }
 
     @GetMapping
-    public List<Player> getAllPlayers() {
-        return playerService.getAllPlayers();
+    public ResponseEntity<List<Player>> getAllPlayers() {
+        return ResponseEntity.ok().body(playerService.getAllPlayers());
     }
 
-    @GetMapping("validPlayers")
-    public List<Player> getValidPlayers() {
-        return playerService.getValidPlayers();
+    @GetMapping("/valid-players")
+    public ResponseEntity<List<Player>> getValidPlayers() {
+        return ResponseEntity.ok().body(playerService.getValidPlayers());
     }
 
-    @GetMapping("{playerID}")
-    public Player showPlayerDetails(
+    @GetMapping("/{playerID}")
+    public ResponseEntity<Player> showPlayerDetails(
             @PathVariable("playerID") Long playerID
     ) {
-        return playerService.getPlayerDetails(playerID);
+        return ResponseEntity.ok().body(playerService.getPlayerDetails(playerID));
     }
 
-    @PostMapping("add")
-    public void registerNewPlayer(
+    @PostMapping
+    public ResponseEntity<Player> addNewPlayer(
+            @Valid
             @RequestBody Player player
     ) {
-        playerService.addNewPlayer(player);
+        Utility utility = new Utility();
+        return ResponseEntity.created(utility.setURI("/cba/players")).body(playerService.addNewPlayer(player));
     }
 
-    @PutMapping("update/{playerID}")
+    @PutMapping("/{playerID}")
     public void updatePlayer(
+            @Valid
             @PathVariable("playerID") Long playerID,
             @RequestBody Player player
     ) {
         playerService.updatePlayer(playerID, player);
     }
 
-    @DeleteMapping("delete/{playerID}")
+    @DeleteMapping("/{playerID}")
     public void deletePlayer(
             @PathVariable("playerID") Long playerID
     ) {

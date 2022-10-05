@@ -3,15 +3,18 @@ package com.elpatron.cba.controller;
 import com.elpatron.cba.dto.TeamDTO;
 import com.elpatron.cba.model.Team;
 import com.elpatron.cba.service.TeamService;
+import com.elpatron.cba.utility.Utility;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
 @RequestMapping("/cba/teams")
 public class TeamController {
-    private TeamService teamService;
+    private final TeamService teamService;
 
     @Autowired
     public TeamController(TeamService teamService) {
@@ -19,48 +22,52 @@ public class TeamController {
     }
 
     @GetMapping
-    public List<TeamDTO> getAllTeams() {
-        return teamService.getAllTeams();
+    public ResponseEntity<List<TeamDTO>> getAllTeams() {
+        return ResponseEntity.ok().body(teamService.getAllTeams());
     }
 
-    @GetMapping("{teamID}")
-    public Team showTeamDetails(
+    @GetMapping("/{teamID}")
+    public ResponseEntity<Team> showTeamDetails(
             @PathVariable("teamID") Long teamID
     ) {
-        return teamService.getTeamDetails(teamID);
+        return ResponseEntity.ok().body(teamService.getTeamDetails(teamID));
     }
 
-    @PostMapping("add")
-    public void registerNewTeam(
+    @PostMapping
+    public ResponseEntity<Team> addNewTeam(
+            @Valid
             @RequestBody Team team
     ) {
-        teamService.addNewTeam(team);
+        Utility utility = new Utility();
+        return ResponseEntity.created(utility.setURI("/cba/teams")).body(teamService.addNewTeam(team));
     }
 
-    @PutMapping("update/{teamID}")
+    @PutMapping("/{teamID}")
     public void updateTeam(
+            @Valid
             @PathVariable("teamID") Long teamID,
             @RequestBody Team team
     ) {
-        teamService.updateTeam(team, teamID);
+        teamService.updateTeam(teamID, team);
     }
 
-    @DeleteMapping("delete/{teamID}")
+    @DeleteMapping("/{teamID}")
     public void deleteTeam(
             @PathVariable("teamID") Long teamID
     ) {
         teamService.deleteTeam(teamID);
     }
 
-    @PostMapping("{teamID}/add")
+    @PostMapping("/{teamID}/add-player")
     public void addTeamPlayers(
+            @Valid
             @PathVariable("teamID") Long teamID,
             @RequestBody List<Long> playerIDs
     ) {
         teamService.addTeamPlayers(teamID, playerIDs);
     }
 
-    @DeleteMapping("{teamID}/remove/{playerID}")
+    @DeleteMapping("/{teamID}/remove/{playerID}")
     public void removeTeamPlayer(
             @PathVariable("teamID") Long teamID,
             @PathVariable("playerID") Long playerID

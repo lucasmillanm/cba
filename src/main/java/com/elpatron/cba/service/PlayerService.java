@@ -3,29 +3,28 @@ package com.elpatron.cba.service;
 import com.elpatron.cba.exception.NotFoundException;
 import com.elpatron.cba.model.Player;
 import com.elpatron.cba.repository.PlayerRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
+@Slf4j
 public class PlayerService {
     public static final String PLAYER_WITH_ID_D_NOT_FOUND = "player with id %d not found";
     private final PlayerRepository playerRepository;
 
-    @Autowired
-    public PlayerService(PlayerRepository playerRepository) {
-        this.playerRepository = playerRepository;
-    }
-
     public List<Player> getAllPlayers() {
+        log.info("fetching all players");
         return playerRepository.findAll();
     }
 
     public List<Player> getValidPlayers() {
+        log.info("fetching all valid players");
         return playerRepository.findAll()
                 .stream()
                 .filter(Player::isValid)
@@ -33,15 +32,17 @@ public class PlayerService {
     }
 
     public Player getPlayerDetails(Long playerID) {
-        Optional<Player> playerOptional = playerRepository.findById(playerID);
-        if (playerOptional.isEmpty()) {
-            throw new NotFoundException(String.format(PLAYER_WITH_ID_D_NOT_FOUND, playerID));
-        }
-        return playerOptional.get();
+        Player existingPlayer = playerRepository.findById(playerID)
+                .orElseThrow(() -> new NotFoundException(
+                        String.format(PLAYER_WITH_ID_D_NOT_FOUND, playerID)
+                ));
+        log.info("fetching player");
+        return existingPlayer;
     }
 
-    public void addNewPlayer(Player player) {
-        playerRepository.save(player);
+    public Player addNewPlayer(Player player) {
+        log.info("adding new player {} {}", player.getFirstName(), player.getLastName());
+        return playerRepository.save(player);
     }
 
     @Transactional
@@ -50,17 +51,20 @@ public class PlayerService {
                 .orElseThrow(() -> new NotFoundException(
                         String.format(PLAYER_WITH_ID_D_NOT_FOUND, playerID)
                 ));
+        log.info("updating player {} {}", player.getFirstName(), player.getLastName());
         existingPlayer.setFirstName(player.getFirstName());
         existingPlayer.setLastName(player.getLastName());
-        existingPlayer.setPos(player.getPos());
+        existingPlayer.setPosition(player.getPosition());
         existingPlayer.setNumber(player.getNumber());
+        existingPlayer.setDescription(player.getDescription());
     }
 
     public void deletePlayer(Long playerID) {
-        boolean exists = playerRepository.existsById(playerID);
-        if (!exists) {
+        if (!playerRepository.existsById(playerID)) {
+            log.warn("player with id {} not found", playerID);
             throw new NotFoundException(String.format(PLAYER_WITH_ID_D_NOT_FOUND, playerID));
         }
+        log.info("deleting player with id {}", playerID);
         playerRepository.deleteById(playerID);
     }
 }
