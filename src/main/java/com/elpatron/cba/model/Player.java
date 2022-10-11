@@ -14,15 +14,7 @@ import javax.validation.constraints.*;
 @Table(name = "player")
 public class Player {
     @Id
-    @SequenceGenerator(
-            name = "player_sequence",
-            sequenceName = "player_sequence",
-            allocationSize = 1
-    )
-    @GeneratedValue(
-            strategy = GenerationType.SEQUENCE,
-            generator = "player_sequence"
-    )
+    @GeneratedValue(strategy = GenerationType.AUTO)
     public Long playerID;
 
     @Size(min = 2, max = 30)

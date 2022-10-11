@@ -16,15 +16,7 @@ import java.util.List;
 @Table(name = "team")
 public class Team {
     @Id
-    @SequenceGenerator(
-            name = "team_sequence",
-            sequenceName = "team_sequence",
-            allocationSize = 1
-    )
-    @GeneratedValue(
-            strategy = GenerationType.SEQUENCE,
-            generator = "team_sequence"
-    )
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long teamID;
 
     @NotBlank(message = "teamCity cannot be empty")
