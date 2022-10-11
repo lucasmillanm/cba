@@ -6,8 +6,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.util.ArrayList;
-
 @SpringBootApplication
 public class CbaApplication {
 
@@ -18,5 +16,6 @@ public class CbaApplication {
     @Bean
     PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+
     }
 }
