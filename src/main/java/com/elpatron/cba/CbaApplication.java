@@ -16,6 +16,5 @@ public class CbaApplication {
     @Bean
     PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
-
     }
 }
