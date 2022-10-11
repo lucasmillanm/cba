@@ -98,6 +98,6 @@ public class UserService implements UserDetailsService {
         existingUser.setName(user.getName());
         existingUser.setUsername(user.getUsername());
         existingUser.setPassword(passwordEncoder.encode(user.getPassword()));
-        userRepository.save(user);
+        userRepository.save(existingUser);
     }
 }
