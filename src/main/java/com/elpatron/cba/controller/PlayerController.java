@@ -1,5 +1,6 @@
 package com.elpatron.cba.controller;
 
+import com.elpatron.cba.dto.PlayerDTO;
 import com.elpatron.cba.model.Player;
 import com.elpatron.cba.service.PlayerService;
 import com.elpatron.cba.utility.Utility;
@@ -21,7 +22,7 @@ public class PlayerController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Player>> getAllPlayers() {
+    public ResponseEntity<List<PlayerDTO>> getAllPlayers() {
         return ResponseEntity.ok().body(playerService.getAllPlayers());
     }
 

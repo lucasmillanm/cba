@@ -1,5 +1,6 @@
 package com.elpatron.cba.service;
 
+import com.elpatron.cba.dto.PlayerDTO;
 import com.elpatron.cba.exception.NotFoundException;
 import com.elpatron.cba.model.Player;
 import com.elpatron.cba.repository.PlayerRepository;
@@ -18,9 +19,16 @@ public class PlayerService {
     public static final String PLAYER_WITH_ID_D_NOT_FOUND = "player with id %d not found";
     private final PlayerRepository playerRepository;
 
-    public List<Player> getAllPlayers() {
+    private PlayerDTO playerDTO(Player player) {
+        return new PlayerDTO(player.getPlayerID(), player.getFirstName(), player.getLastName(), player.getPosition(), player.getNumber());
+    }
+
+    public List<PlayerDTO> getAllPlayers() {
         log.info("fetching all players");
-        return playerRepository.findAll();
+        return playerRepository.findAll()
+                .stream()
+                .map(this::playerDTO)
+                .collect(Collectors.toList());
     }
 
     public List<Player> getValidPlayers() {
