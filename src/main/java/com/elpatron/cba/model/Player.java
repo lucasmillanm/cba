@@ -11,7 +11,6 @@ import javax.validation.constraints.*;
 @Setter
 @NoArgsConstructor
 @Entity
-@Table(name = "player")
 public class Player {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
