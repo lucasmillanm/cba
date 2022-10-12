@@ -28,6 +28,10 @@ public class TeamService {
     private final TeamRepository teamRepository;
     private final PlayerRepository playerRepository;
 
+    private TeamDTO teamDTO(Team team) {
+        return new TeamDTO(team.getTeamID(), team.getTeamCity(), team.getTeamName());
+    }
+
     public List<TeamDTO> getAllTeams() {
         log.info("fetching all teams");
         return teamRepository.findAll()
@@ -44,9 +48,6 @@ public class TeamService {
         return existingTeam;
     }
 
-    private TeamDTO teamDTO(Team team) {
-        return new TeamDTO(team.getTeamID(), team.getTeamCity(), team.getTeamName());
-    }
 
     public Team addNewTeam(Team team) {
         if (teamRepository.existsTeamByTeamName(team.getTeamName())) {
