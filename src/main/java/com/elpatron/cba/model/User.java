@@ -19,12 +19,12 @@ public class User {
     private Long id;
 
     @Size(min = 2, max = 30)
-    @NotBlank(message = "name cannot be empty")
-    private String name;
-
-    @Size(min = 2, max = 30)
     @NotBlank(message = "username cannot be empty")
     private String username;
+
+    @Size(min = 2, max = 30)
+    @NotBlank(message = "name cannot be empty")
+    private String name;
 
     @Size(min = 3, max = 64)
     @NotBlank(message = "password cannot be empty")

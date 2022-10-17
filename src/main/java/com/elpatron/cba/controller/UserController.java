@@ -36,6 +36,13 @@ public class UserController {
         return ResponseEntity.ok().body(userService.getAllUsers());
     }
 
+    @GetMapping("/user/{username}")
+    public User getUserByUsername(
+           @PathVariable("username") String username
+    ) {
+        return userService.getUser(username);
+    }
+
     @PostMapping
     public ResponseEntity<User> addNewUser(
             @Valid
