@@ -37,8 +37,8 @@ public class Team {
         this.teamPlayers = teamPlayers;
     }
 
-    public void addTeamPlayer(Player player) {
-        teamPlayers.add(player);
+    public void addTeamPlayers(List<Player> players) {
+        teamPlayers.addAll(players);
     }
 
     public void removeTeamPlayer(Player player) {

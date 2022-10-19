@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -95,19 +96,22 @@ public class TeamService {
 
     public void addTeamPlayers(Long teamID, List<Long> playerIDs) {
         Optional<Team> teamOptional = teamRepository.findById(teamID);
-        for (Long playerID : playerIDs) {
-            Optional<Player> playerOptional = playerRepository.findById(playerID);
-            if (teamOptional.isPresent() && playerOptional.isPresent()) {
-                Team team = teamOptional.get();
-                Player player = playerOptional.get();
-                team.addTeamPlayer(player);
-                player.setValid(false);
-                log.info("adding player to team");
-                teamRepository.save(team);
-            } else {
-                log.warn("team or player not found");
-                throw new NotFoundException(String.format(TEAM_WITH_ID_D_OR_PLAYER_WITH_ID_S_NOT_FOUND, teamID, playerID));
+        ArrayList<Player> players = new ArrayList<>();
+        if (teamOptional.isPresent()) {
+            for (Long playerID : playerIDs) {
+                Optional<Player> playerOptional = playerRepository.findById(playerID);
+                if (playerOptional.isEmpty()) {
+                    log.warn("team or player not found");
+                    throw new NotFoundException(String.format(TEAM_WITH_ID_D_OR_PLAYER_WITH_ID_S_NOT_FOUND, teamID, playerID));
+                } else {
+                    playerOptional.get().setValid(false);
+                    players.add(playerOptional.get());
+                }
             }
+            Team team = teamOptional.get();
+            team.addTeamPlayers(players);
+            log.info("adding player to team");
+            teamRepository.save(team);
         }
     }
 
