@@ -29,7 +29,7 @@ public class TeamService {
     private final PlayerRepository playerRepository;
 
     private TeamDTO teamDTO(Team team) {
-        return new TeamDTO(team.getTeamID(), team.getTeamCity(), team.getTeamName());
+        return new TeamDTO(team.getTeamID(), team.getTeamCity(), team.getTeamName(), team.getTeamCoach());
     }
 
     public List<TeamDTO> getAllTeams() {

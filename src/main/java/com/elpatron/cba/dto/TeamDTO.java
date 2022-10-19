@@ -9,4 +9,5 @@ public class TeamDTO {
     private Long teamID;
     private String teamCity;
     private String teamName;
+    private String teamCoach;
 }
