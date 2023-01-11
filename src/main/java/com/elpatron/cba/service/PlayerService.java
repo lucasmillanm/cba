@@ -65,6 +65,7 @@ public class PlayerService {
         existingPlayer.setPosition(player.getPosition());
         existingPlayer.setNumber(player.getNumber());
         existingPlayer.setDescription(player.getDescription());
+        playerRepository.save(existingPlayer);
     }
 
     public void deletePlayer(Long playerID) {
